@@ -179,7 +179,9 @@ hljs.initHighlightingOnLoad();
 </head>
 
 <body>
-<p><strong>Author: Luigi Marchionni, May 6th 2014</strong></p>
+<p><strong>Author: Nitesh Turaga, May 6th 2014</strong></p>
+
+<p><strong>Original Code: Luigi Marchionni</strong></p>
 
 <h1>Goal: from Affymetrix raw data stored in CEL files to differential gene expression</h1>
 
@@ -203,7 +205,7 @@ hljs.initHighlightingOnLoad();
 <pre><code class="r">date()
 </code></pre>
 
-<pre><code>## [1] &quot;Sun May  4 21:09:10 2014&quot;
+<pre><code>## [1] &quot;Mon May  5 15:46:59 2014&quot;
 </code></pre>
 
 <h2>Bioconductor</h2>
@@ -328,18 +330,110 @@ dat
 
 <pre><code class="r"># Dimensions
 dim(dat)
+</code></pre>
 
-# Structure
+<pre><code>## Rows Cols 
+##  640  640
+</code></pre>
+
+<pre><code class="r"># Structure
 str(dat)
+</code></pre>
 
-# Information about the platform
-annotation(dat)
+<pre><code>## Formal class &#39;AffyBatch&#39; [package &quot;affy&quot;] with 10 slots
+##   ..@ cdfName          : chr &quot;HG_U95A&quot;
+##   ..@ nrow             : Named int 640
+##   .. ..- attr(*, &quot;names&quot;)= chr &quot;Rows&quot;
+##   ..@ ncol             : Named int 640
+##   .. ..- attr(*, &quot;names&quot;)= chr &quot;Cols&quot;
+##   ..@ assayData        :&lt;environment: 0x7fbfdfe13310&gt; 
+##   ..@ phenoData        :Formal class &#39;AnnotatedDataFrame&#39; [package &quot;Biobase&quot;] with 4 slots
+##   .. .. ..@ varMetadata      :&#39;data.frame&#39;:  1 obs. of  1 variable:
+##   .. .. .. ..$ labelDescription: chr &quot;arbitrary numbering&quot;
+##   .. .. ..@ data             :&#39;data.frame&#39;:  13 obs. of  1 variable:
+##   .. .. .. ..$ sample: int [1:13] 1 2 3 4 5 6 7 8 9 10 ...
+##   .. .. ..@ dimLabels        : chr [1:2] &quot;sampleNames&quot; &quot;sampleColumns&quot;
+##   .. .. ..@ .__classVersion__:Formal class &#39;Versions&#39; [package &quot;Biobase&quot;] with 1 slots
+##   .. .. .. .. ..@ .Data:List of 1
+##   .. .. .. .. .. ..$ : int [1:3] 1 1 0
+##   ..@ featureData      :Formal class &#39;AnnotatedDataFrame&#39; [package &quot;Biobase&quot;] with 4 slots
+##   .. .. ..@ varMetadata      :&#39;data.frame&#39;:  0 obs. of  1 variable:
+##   .. .. .. ..$ labelDescription: chr(0) 
+##   .. .. ..@ data             :&#39;data.frame&#39;:  409600 obs. of  0 variables
+##   .. .. ..@ dimLabels        : chr [1:2] &quot;featureNames&quot; &quot;featureColumns&quot;
+##   .. .. ..@ .__classVersion__:Formal class &#39;Versions&#39; [package &quot;Biobase&quot;] with 1 slots
+##   .. .. .. .. ..@ .Data:List of 1
+##   .. .. .. .. .. ..$ : int [1:3] 1 1 0
+##   ..@ experimentData   :Formal class &#39;MIAME&#39; [package &quot;Biobase&quot;] with 13 slots
+##   .. .. ..@ name             : chr &quot;&quot;
+##   .. .. ..@ lab              : chr &quot;&quot;
+##   .. .. ..@ contact          : chr &quot;&quot;
+##   .. .. ..@ title            : chr &quot;&quot;
+##   .. .. ..@ abstract         : chr &quot;&quot;
+##   .. .. ..@ url              : chr &quot;&quot;
+##   .. .. ..@ pubMedIds        : chr &quot;&quot;
+##   .. .. ..@ samples          : list()
+##   .. .. ..@ hybridizations   : list()
+##   .. .. ..@ normControls     : list()
+##   .. .. ..@ preprocessing    :List of 2
+##   .. .. .. ..$ filenames  : chr [1:13] &quot;./data/raw/GSM133995.CEL.gz&quot; &quot;./data/raw/GSM134000.CEL.gz&quot; &quot;./data/raw/GSM134015.CEL.gz&quot; &quot;./data/raw/GSM134050.CEL.gz&quot; ...
+##   .. .. .. ..$ affyversion: chr NA
+##   .. .. ..@ other            :List of 1
+##   .. .. .. ..$ : chr &quot;&quot;
+##   .. .. ..@ .__classVersion__:Formal class &#39;Versions&#39; [package &quot;Biobase&quot;] with 1 slots
+##   .. .. .. .. ..@ .Data:List of 2
+##   .. .. .. .. .. ..$ : int [1:3] 1 0 0
+##   .. .. .. .. .. ..$ : int [1:3] 1 1 0
+##   ..@ annotation       : chr &quot;hgu95a&quot;
+##   ..@ protocolData     :Formal class &#39;AnnotatedDataFrame&#39; [package &quot;Biobase&quot;] with 4 slots
+##   .. .. ..@ varMetadata      :&#39;data.frame&#39;:  1 obs. of  1 variable:
+##   .. .. .. ..$ labelDescription: chr NA
+##   .. .. ..@ data             :&#39;data.frame&#39;:  13 obs. of  1 variable:
+##   .. .. .. ..$ ScanDate: chr [1:13] &quot;07/13/ 11:25:32&quot; &quot;06/29/ 12:47:12&quot; &quot;06/29/ 12:26:42&quot; &quot;06/29/ 12:54:44&quot; ...
+##   .. .. ..@ dimLabels        : chr [1:2] &quot;sampleNames&quot; &quot;sampleColumns&quot;
+##   .. .. ..@ .__classVersion__:Formal class &#39;Versions&#39; [package &quot;Biobase&quot;] with 1 slots
+##   .. .. .. .. ..@ .Data:List of 1
+##   .. .. .. .. .. ..$ : int [1:3] 1 1 0
+##   ..@ .__classVersion__:Formal class &#39;Versions&#39; [package &quot;Biobase&quot;] with 1 slots
+##   .. .. ..@ .Data:List of 4
+##   .. .. .. ..$ : int [1:3] 3 0 3
+##   .. .. .. ..$ : int [1:3] 2 22 0
+##   .. .. .. ..$ : int [1:3] 1 3 0
+##   .. .. .. ..$ : int [1:3] 1 2 0
+</code></pre>
 
-# Information about the features
-head(featureData(dat))
+<p>Information about the platform</p>
 
-### Information about the samples, also called the phenotype data.
-pData(dat)
+<pre><code class="r">annotation(dat)
+</code></pre>
+
+<pre><code>## [1] &quot;hgu95a&quot;
+</code></pre>
+
+<p>Information about the features</p>
+
+<pre><code class="r">head(featureData(dat))
+</code></pre>
+
+<p>Information about the samples, also called the phenotype data.</p>
+
+<pre><code class="r">pData(dat)
+</code></pre>
+
+<pre><code>##                  sample
+## GSM133995.CEL.gz      1
+## GSM134000.CEL.gz      2
+## GSM134015.CEL.gz      3
+## GSM134050.CEL.gz      4
+## GSM134060.CEL.gz      5
+## GSM134070.CEL.gz      6
+## GSM44082.CEL.gz       7
+## GSM44083.CEL.gz       8
+## GSM44084.CEL.gz       9
+## GSM44088.CEL.gz      10
+## GSM44089.CEL.gz      11
+## GSM44091.CEL.gz      12
+## GSM44092.CEL.gz      13
 </code></pre>
 
 <p>Read the phenotype data associated with the experiment. <strong>Note the use of colClasses</strong> in the following code.
@@ -488,7 +582,7 @@ dim(dat.rma)
 
 <h2>Design Matrix</h2>
 
-<h3>To create the design matrix  to fit the linear model we start combining all levels of our factors of interest</h3>
+<p>To create the design matrix  to fit the linear model we start combining all levels of our factors of interest</p>
 
 <pre><code class="r">groups &lt;- factor(paste(pheno$CancerType, pheno$CellType, sep = &quot;.&quot;))
 
@@ -881,48 +975,70 @@ eb2.ls &lt;- eBayes(fit2.ls, proportion = 0.01)
 
 <p>You can retrieve the top differentially expressed genes for a specific contrast in the contrast matrix by name</p>
 
-<pre><code class="r">tG &lt;- topTable(eb.ls, coef = &quot;CellType&quot;, number = 10, resort = &quot;logFC&quot;)
+<pre><code class="r">tG &lt;- topTable(eb.ls, coef = &quot;CellType&quot;, number = 10, resort = &quot;logFC&quot;, genelist = rownames(eb.ls))
 tG
 </code></pre>
 
-<pre><code>##                 logFC AveExpr      t   P.Value adj.P.Val     B
-## AFFX-BioB-3_at  5.003  11.554  25.28 3.568e-11 6.435e-08 15.62
-## AFFX-BioB-M_at  4.390  11.822  20.66 3.222e-10 3.954e-07 13.80
-## 426_at          3.825   7.132  31.58 3.108e-12 7.847e-09 17.43
-## 39712_at        2.773   9.438  22.42 1.320e-10 1.851e-07 14.56
-## 34771_at        1.715   9.737  24.18 5.805e-11 9.162e-08 15.23
-## 1864_at        -3.317   7.166 -25.70 2.972e-11 6.254e-08 15.77
-## AFFX-CreX-3_at -3.957  12.661 -36.58 6.154e-13 2.590e-09 18.48
-## 41165_g_at     -4.395  12.664 -34.05 1.356e-12 4.281e-09 17.98
-## 41164_at       -4.977  12.338 -42.54 1.162e-13 7.337e-10 19.43
-## 125_r_at       -5.052  10.466 -50.66 1.681e-14 2.122e-10 20.36
+<pre><code>##                            ID  logFC AveExpr      t   P.Value adj.P.Val
+## AFFX-BioB-3_at AFFX-BioB-3_at  5.003  11.554  25.28 3.568e-11 6.435e-08
+## AFFX-BioB-M_at AFFX-BioB-M_at  4.390  11.822  20.66 3.222e-10 3.954e-07
+## 426_at                 426_at  3.825   7.132  31.58 3.108e-12 7.847e-09
+## 39712_at             39712_at  2.773   9.438  22.42 1.320e-10 1.851e-07
+## 34771_at             34771_at  1.715   9.737  24.18 5.805e-11 9.162e-08
+## 1864_at               1864_at -3.317   7.166 -25.70 2.972e-11 6.254e-08
+## AFFX-CreX-3_at AFFX-CreX-3_at -3.957  12.661 -36.58 6.154e-13 2.590e-09
+## 41165_g_at         41165_g_at -4.395  12.664 -34.05 1.356e-12 4.281e-09
+## 41164_at             41164_at -4.977  12.338 -42.54 1.162e-13 7.337e-10
+## 125_r_at             125_r_at -5.052  10.466 -50.66 1.681e-14 2.122e-10
+##                    B
+## AFFX-BioB-3_at 15.62
+## AFFX-BioB-M_at 13.80
+## 426_at         17.43
+## 39712_at       14.56
+## 34771_at       15.23
+## 1864_at        15.77
+## AFFX-CreX-3_at 18.48
+## 41165_g_at     17.98
+## 41164_at       19.43
+## 125_r_at       20.36
 </code></pre>
 
-<pre><code class="r"># tG &lt;- tG[order(tG$ID),]
-tG &lt;- tG[order(rownames(tG)), ]
+<pre><code class="r">tG &lt;- tG[order(tG$ID), ]
+# tG &lt;- tG[order(rownames(tG)),]
 </code></pre>
 
 <p>You can retrieve the top differentially expressed genes for a specific contrast in the contrast matrix by index</p>
 
-<pre><code class="r">tG2 &lt;- topTable(eb2.ls, coef = 1, number = 10, resort = &quot;logFC&quot;)
+<pre><code class="r">tG2 &lt;- topTable(eb2.ls, coef = 1, number = 10, resort = &quot;logFC&quot;, genelist = rownames(eb2.ls))
 tG2
 </code></pre>
 
-<pre><code>##                 logFC AveExpr      t   P.Value adj.P.Val     B
-## AFFX-BioB-3_at  5.003  11.554  25.28 3.568e-11 6.435e-08 15.62
-## AFFX-BioB-M_at  4.390  11.822  20.66 3.222e-10 3.954e-07 13.80
-## 426_at          3.825   7.132  31.58 3.108e-12 7.847e-09 17.43
-## 39712_at        2.773   9.438  22.42 1.320e-10 1.851e-07 14.56
-## 34771_at        1.715   9.737  24.18 5.805e-11 9.162e-08 15.23
-## 1864_at        -3.317   7.166 -25.70 2.972e-11 6.254e-08 15.77
-## AFFX-CreX-3_at -3.957  12.661 -36.58 6.154e-13 2.590e-09 18.48
-## 41165_g_at     -4.395  12.664 -34.05 1.356e-12 4.281e-09 17.98
-## 41164_at       -4.977  12.338 -42.54 1.162e-13 7.337e-10 19.43
-## 125_r_at       -5.052  10.466 -50.66 1.681e-14 2.122e-10 20.36
+<pre><code>##                            ID  logFC AveExpr      t   P.Value adj.P.Val
+## AFFX-BioB-3_at AFFX-BioB-3_at  5.003  11.554  25.28 3.568e-11 6.435e-08
+## AFFX-BioB-M_at AFFX-BioB-M_at  4.390  11.822  20.66 3.222e-10 3.954e-07
+## 426_at                 426_at  3.825   7.132  31.58 3.108e-12 7.847e-09
+## 39712_at             39712_at  2.773   9.438  22.42 1.320e-10 1.851e-07
+## 34771_at             34771_at  1.715   9.737  24.18 5.805e-11 9.162e-08
+## 1864_at               1864_at -3.317   7.166 -25.70 2.972e-11 6.254e-08
+## AFFX-CreX-3_at AFFX-CreX-3_at -3.957  12.661 -36.58 6.154e-13 2.590e-09
+## 41165_g_at         41165_g_at -4.395  12.664 -34.05 1.356e-12 4.281e-09
+## 41164_at             41164_at -4.977  12.338 -42.54 1.162e-13 7.337e-10
+## 125_r_at             125_r_at -5.052  10.466 -50.66 1.681e-14 2.122e-10
+##                    B
+## AFFX-BioB-3_at 15.62
+## AFFX-BioB-M_at 13.80
+## 426_at         17.43
+## 39712_at       14.56
+## 34771_at       15.23
+## 1864_at        15.77
+## AFFX-CreX-3_at 18.48
+## 41165_g_at     17.98
+## 41164_at       19.43
+## 125_r_at       20.36
 </code></pre>
 
-<pre><code class="r"># tG2 &lt;- tG2[order(tG2$ID),]
-tG2 &lt;- tG2[order(rownames(tG2)), ]
+<pre><code class="r">tG2 &lt;- tG2[order(tG2$ID), ]
+# tG2 &lt;- tG2[order(rownames(tG2)),]
 </code></pre>
 
 <p>The same genes were identified</p>
@@ -935,13 +1051,14 @@ tG2 &lt;- tG2[order(rownames(tG2)), ]
 
 <pre><code class="r">
 # We can also return ALL the features investigated by using Inf
-tG2 &lt;- topTable(eb2.ls, coef = 1, number = Inf, resort = &quot;logFC&quot;)
+tG2 &lt;- topTable(eb2.ls, coef = 1, number = Inf, resort = &quot;logFC&quot;, genelist = rownames(eb2.ls))
 
 # As you can see we need to add gene annotation!
 str(tG2)
 </code></pre>
 
-<pre><code>## &#39;data.frame&#39;:    12626 obs. of  6 variables:
+<pre><code>## &#39;data.frame&#39;:    12626 obs. of  7 variables:
+##  $ ID       : chr  &quot;35766_at&quot; &quot;40899_at&quot; &quot;AFFX-BioB-3_at&quot; &quot;31888_s_at&quot; ...
 ##  $ logFC    : num  7.08 5.73 5 4.97 4.56 ...
 ##  $ AveExpr  : num  10.32 9.89 11.55 9.18 10.5 ...
 ##  $ t        : num  20.53 11.94 25.28 16.24 7.45 ...
@@ -985,19 +1102,16 @@ str(tG2ann)
 
 <p>Using the &ldquo;new&rdquo; and simple method based on select():</p>
 
-<pre><code class="r"># ann &lt;- select(x=hgu95a.db, keys=tG2$ID,cols=c(&#39;ENTREZID&#39;, &#39;SYMBOL&#39;,
-# &#39;GENENAME&#39;))
-ann &lt;- select(x = hgu95a.db, keys = rownames(tG2), cols = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, 
+<pre><code class="r">ann &lt;- select(x = hgu95a.db, keys = tG2$ID, columns = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, 
     &quot;GENENAME&quot;))
 </code></pre>
 
-<pre><code>## Warning: The &#39;cols&#39; argument has been deprecated and replaced by &#39;columns&#39;
-##   for versions of Bioc that are higher than 2.13.  Please use the
-##   &#39;columns&#39; argument anywhere that you previously used &#39;cols&#39;
-## Warning: &#39;select&#39; resulted in 1:many mapping between keys and return rows
+<pre><code>## Warning: &#39;select&#39; resulted in 1:many mapping between keys and return rows
 </code></pre>
 
-<pre><code class="r">
+<pre><code class="r"># ann &lt;- select(x=hgu95a.db, keys=rownames(tG2),cols=c(&#39;ENTREZID&#39;, &#39;SYMBOL&#39;,
+# &#39;GENENAME&#39;))
+
 ### Check the dimensions of the annotation the results data.frames
 dim(ann)
 </code></pre>
@@ -1008,11 +1122,12 @@ dim(ann)
 <pre><code class="r">dim(tG2)
 </code></pre>
 
-<pre><code>## [1] 12626     6
+<pre><code>## [1] 12626     7
 </code></pre>
 
-<pre><code class="r">### Add the annnotation to differential gene expression results
-tG2$ID = rownames(tG2)
+<p>Add the annnotation to differential gene expression results</p>
+
+<pre><code class="r"># tG2$ID = rownames(tG2)
 tG2ann2 &lt;- merge(x = ann, y = tG2, by.x = &quot;PROBEID&quot;, by.y = &quot;ID&quot;, all.x = TRUE, 
     all.y = FALSE)
 

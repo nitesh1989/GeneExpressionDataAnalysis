@@ -1,14 +1,18 @@
-__Author: Luigi Marchionni, May 6th 2014__
+__Author: Nitesh Turaga, May 6th 2014__
 
+__Original Code: Luigi Marchionni__
 
 Goal: from Affymetrix raw data stored in CEL files to differential gene expression
 ========================================================
+
+
+
 
 ### Some Basics
 
 Getting  the working directory, in my case
 
-```{r getwd}
+```{r getwd,background="blue"}
 getwd()
 ````
 
@@ -99,20 +103,28 @@ You can find information about this class as usual
 ```
 
 Check the Dimensions of the object, the structure and information about the annotation of the data. It is important to know how the data is organized, and get some information from the **AffyBatch** class.
-```{r checkDataProperties,eval=FALSE}
+```{r checkDataProperties,eval=TRUE}
 # Dimensions
 dim(dat)
+```
 
+```{r}
 #Structure
 str(dat)
+```
 
-# Information about the platform
+Information about the platform
+```{r}
 annotation(dat)
+```
 
-# Information about the features
+Information about the features
+```{r,eval=FALSE}
 head(featureData(dat))
+```
 
-### Information about the samples, also called the phenotype data.
+Information about the samples, also called the phenotype data.
+```{r}
 pData(dat)
 ```
 
@@ -187,7 +199,8 @@ Differential Gene Expression Analysis
 
 Design Matrix
 -------------
-### To create the design matrix  to fit the linear model we start combining all levels of our factors of interest
+
+To create the design matrix  to fit the linear model we start combining all levels of our factors of interest
 ```{r designMatrix}
 groups <- factor(paste(pheno$CancerType, pheno$CellType, sep="."))
 
@@ -284,19 +297,19 @@ write.fit(eb.ls, file="./text/anovaTable.txt")
 
 You can retrieve the top differentially expressed genes for a specific contrast in the contrast matrix by name
 ```{r retrieveTopDEGenes1}
-tG <- topTable(eb.ls, coef="CellType", number=10, resort="logFC")
+tG <- topTable(eb.ls, coef="CellType", number=10, resort="logFC",genelist=rownames(eb.ls))
 tG
-#tG <- tG[order(tG$ID),]
-tG <- tG[order(rownames(tG)),]
+tG <- tG[order(tG$ID),]
+#tG <- tG[order(rownames(tG)),]
 
 ```
 
 You can retrieve the top differentially expressed genes for a specific contrast in the contrast matrix by index
 ```{r retrieveTopDEGenes2}
-tG2 <- topTable(eb2.ls, coef=1, number=10, resort="logFC")
+tG2 <- topTable(eb2.ls, coef=1, number=10, resort="logFC",genelist=rownames(eb2.ls))
 tG2
-#tG2 <- tG2[order(tG2$ID),]
-tG2 <- tG2[order(rownames(tG2)),]
+tG2 <- tG2[order(tG2$ID),]
+#tG2 <- tG2[order(rownames(tG2)),]
 ```
 
 The same genes were identified
@@ -304,7 +317,7 @@ The same genes were identified
 all(tG == tG2)
 
 # We can also return ALL the features investigated by using Inf
-tG2 <- topTable(eb2.ls, coef=1, number=Inf, resort="logFC")
+tG2 <- topTable(eb2.ls, coef=1, number=Inf, resort="logFC",genelist=rownames(eb2.ls))
 
 # As you can see we need to add gene annotation!
 str(tG2)
@@ -347,17 +360,20 @@ str(tG2ann)
 Using the "new" and simple method based on select():
 
 ```{r retrieveAnnotation}
-#ann <- select(x=hgu95a.db, keys=tG2$ID,cols=c("ENTREZID", "SYMBOL", "GENENAME"))
-ann <- select(x=hgu95a.db, keys=rownames(tG2),cols=c("ENTREZID", "SYMBOL", "GENENAME"))
+ann <- select(x=hgu95a.db, keys=tG2$ID,columns=c("ENTREZID", "SYMBOL", "GENENAME"))
+
+#Alternative
+#ann <- select(x=hgu95a.db, keys=rownames(tG2),cols=c("ENTREZID", "SYMBOL", "GENENAME"))
 
 ### Check the dimensions of the annotation the results data.frames
 dim(ann)
 dim(tG2)
 ```
 
+Add the annnotation to differential gene expression results
+
 ```{r addAnnotationToDGE}
-### Add the annnotation to differential gene expression results
-tG2$ID = rownames(tG2)
+# tG2$ID = rownames(tG2)
 tG2ann2 <- merge(x=ann, y=tG2, by.x="PROBEID", by.y="ID", all.x=TRUE, all.y=FALSE)
 
 ### Let's check the results now
