@@ -1,0 +1,800 @@
+
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.1.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ###################################################
+> ### Luigi Marchionni
+> ### May 10, 2013
+> 
+> ### Goal: from Affymetrix raw data stored in CEL files to differential gene expression
+> 
+> 
+> ###################################################
+> ### Getting  the working directory, in my case
+> getwd()
+[1] "/Users/niteshturaga/Documents/Feb142014-backup/Documents/JHMI-Research/Luigi_GeneExpression_TA/affyData/code"
+> 
+> 
+> ###################################################
+> ### Setting the working directory, in my case
+> 
+> setwd("~/Documents/Feb142014-backup/Documents/JHMI-Research/Luigi_GeneExpression_TA/affyData")
+> #setwd("~/3EDUCATION/myRtutorials/affyData")
+> 
+> 
+> ###################################################
+> ### Check the data
+> date()
+[1] "Sun May  4 18:14:42 2014"
+> 
+> 
+> ###################################################
+> ### We are going to use the following packages from bioconductor:
+> ### "affy", "limma", "hgu95a.db", "annotate"
+> ### To install the missing packages from Bioconductor use biocLite()
+> 
+> ### First you need to get the list of available packages
+> installedPckgs <- installed.packages()[,"Package"]
+> 
+> ### Here we define the list of desired libraries
+> pckgListBIOC <- c("affy", "limma", "hgu95a.db", "annotate")
+> 
+> ### We source the biocLite.R script from the Bioconductor website
+> source("http://bioconductor.org/biocLite.R")
+Bioconductor version 2.13 (BiocInstaller 1.12.1), ?biocLite for help
+A newer version of Bioconductor is available after installing a new version of
+  R, ?BiocUpgrade for help
+> 
+> ### Load the packages, or install them from Bioconductor if needed
+> for (pckg in pckgListBIOC) {
++ 	if (! pckg %in% installedPckgs) biocLite(pckg)
++ 	require(pckg, character.only=TRUE)
++ }
+Loading required package: affy
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following object is masked from ‘package:stats’:
+
+    xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, as.vector, cbind, colnames,
+    duplicated, eval, evalq, Filter, Find, get, intersect, is.unsorted,
+    lapply, Map, mapply, match, mget, order, paste, pmax, pmax.int,
+    pmin, pmin.int, Position, rank, rbind, Reduce, rep.int, rownames,
+    sapply, setdiff, sort, table, tapply, union, unique, unlist
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: limma
+
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+Loading required package: hgu95a.db
+Loading required package: AnnotationDbi
+Loading required package: org.Hs.eg.db
+Loading required package: DBI
+
+
+Loading required package: annotate
+> 
+> 
+> ###################################################
+> ### Clear the workspace, note the two "embedded" functions
+> rm(list=ls())
+> 
+> 
+> ###################################################
+> ### Load the libraries needed for the analysis, note the use of "require"
+> require(affy)
+> require(limma)
+> require(hgu95a.db)
+> require(annotate)
+> 
+> 
+> ##################################################
+> ##################################################
+> ### Reading and preprocessing the expression data
+> ##################################################
+> ##################################################
+> 
+> 
+> ###################################################
+> ### Load data from CEL files using the ReadAffy function
+> dat <- ReadAffy(celfile.path="./data/raw/", compress=TRUE)
+> 
+> 
+> ###################################################
+> ### Let's have a look at the dat object
+> 
+> ### Just print
+> print(dat)
+
+AffyBatch object
+size of arrays=640x640 features (20 kb)
+cdf=HG_U95A (12626 affyids)
+number of samples=13
+number of genes=12626
+annotation=hgu95a
+notes=
+> 
+> ### Class
+> class(dat)
+[1] "AffyBatch"
+attr(,"package")
+[1] "affy"
+> 
+> ### You can find information about this class as usual
+> ?AffyBatch
+AffyBatch-class              package:affy              R Documentation
+
+_C_l_a_s_s _A_f_f_y_B_a_t_c_h
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     This is a class representation for Affymetrix GeneChip probe level
+     data. The main component are the intensities from multiple arrays
+     of the same ‘CDF’ type. It extends ‘eSet’.
+
+_O_b_j_e_c_t_s _f_r_o_m _t_h_e _C_l_a_s_s:
+
+     Objects can be created using the function ‘read.affybatch’ or the
+     wrapper ‘ReadAffy’.
+
+_S_l_o_t_s:
+
+     ‘cdfName’: Object of class ‘character’ representing the name of
+          ‘CDF’ file associated with the arrays in the ‘AffyBatch’.
+
+     ‘nrow’: Object of class ‘integer’ representing the physical number
+          of rows in the arrays.
+
+     ‘ncol’: Object of class ‘integer’ representing the physical number
+          of columns in the arrays.
+
+     ‘assayData’: Object of class ‘AssayData’ containing the raw data,
+          which will be at minimum a matrix of intensity values. This
+          slot can also hold a matrix of standard errors if the 'sd'
+          argument is set to ‘TRUE’ in the call to ‘ReadAffy’.
+
+     ‘phenoData’: Object of class ‘AnnotatedDataFrame’ containing
+          phenotypic data for the samples.
+
+     ‘annotation’ A character string identifying the annotation that
+          may be used for the ‘ExpressionSet’ instance.
+
+     ‘protocolData’: Object of class ‘AnnotatedDataFrame’ containing
+          protocol data for the samples.
+
+     ‘featureData’ Object of class ‘AnnotatedDataFrame’ containing
+          feature-level (e.g., probeset-level) information.
+
+     ‘experimentData’: Object of class "MIAME" containing
+          experiment-level information.
+
+     ‘.__classVersion__’: Object of class ‘Versions’ describing the R
+          and Biobase version number used to create the instance.
+          Intended for developer use.
+
+_E_x_t_e_n_d_s:
+
+     Class ‘"eSet"’, directly.
+
+_M_e_t_h_o_d_s:
+
+     cdfName ‘signature(object = "AffyBatch")’: obtains the cdfName
+          slot.
+
+     pm<- ‘signature(object = "AffyBatch")’: replaces the perfect match
+          intensities.
+
+     pm ‘signature(object = "AffyBatch")’: extracts the pm intensities.
+
+     mm<- ‘signature(object = "AffyBatch")’: replaces the mismatch
+          intensities.
+
+     mm ‘signature(object = "AffyBatch")’: extracts the mm intensities.
+
+     probes ‘signature(object = "AffyBatch", which)’: extract the
+          perfect match or mismatch probe intensities. Uses which can
+          be "pm" and "mm".
+
+     exprs ‘signature(object = "AffyBatch")’: extracts the expression
+          matrix.
+
+     exprs<- ‘signature(object = "AffyBatch", value = "matrix")’:
+          replaces the expression matrix.
+
+     se.exprs ‘signature(object = "AffyBatch")’: extracts the matrix of
+          standard errors of expression values, if available.
+
+     se.exprs<- ‘signature(object = "AffyBatch", value = "matrix")’:
+          replaces the matrix of standard errors of expression values.
+
+     [<- ‘signature(x = "AffyBatch")’: replaces subsets.
+
+     [ ‘signature(x = "AffyBatch")’: subsets by array.
+
+     boxplot ‘signature(x = "AffyBatch")’: creates a ‘boxplot’s of log
+          base 2 intensities (pm, mm or both).  Defaults to both.
+
+     hist ‘signature(x = "AffyBatch")’: creates a plot showing all the
+          histograms of the pm,mm or both data. See ‘plotDensity’.
+
+     computeExprSet ‘signature(x = "AffyBatch", summary.method =
+          "character")’: For each probe set computes an expression
+          value using ‘summary.method’.
+
+     featureNames ‘signature(object = "AffyBatch")’: return the probe
+          set names also referred to as the Affymetrix IDs. Notice that
+          one can not assign ‘featureNames’. You must do this by
+          changing the cdfenvs.
+
+     geneNames ‘signature(object="AffyBatch'")’: deprecated, use
+          ‘featureNames’.
+
+     getCdfInfo ‘signature(object = "AffyBatch")’: retrieve the
+          environment that defines the location of probes by probe set.
+
+     image ‘signature(x = "AffyBatch")’: creates an image for each
+          sample.
+
+     indexProbes ‘signature(object = "AffyBatch", which =
+          "character")’: returns a list with locations of the probes in
+          each probe set. The affyID corresponding to the probe set to
+          retrieve can be specified in an optional parameter
+          ‘genenames’. By default, all the affyIDs are retrieved. The
+          names of the elements in the list returned are the affyIDs.
+          ‘which’ can be "pm", "mm", or "both". If "both" then perfect
+          match locations are given followed by mismatch locations.
+
+          ‘signature(object = "AffyBatch", which = "missing")’ (i.e.,
+          calling ‘indexProbes’ without a "which" argument) is the same
+          as setting "which" to "pm".
+
+     intensity<- ‘signature(object = "AffyBatch")’: a replacement
+          method for the ‘exprs’ slot, i.e. the intensities.
+
+     intensity ‘signature(object = "AffyBatch")’: extract the ‘exprs’
+          slot, i.e. the intensities.
+
+     length ‘signature(x = "AffyBatch")’: returns the number of
+          samples.
+
+     pmindex ‘signature(object = "AffyBatch")’: return the location of
+          perfect matches in the intensity matrix.
+
+     mmindex ‘signature(object = "AffyBatch")’: return the location of
+          the mismatch intensities.
+
+     dim ‘signature(x = "AffyBatch")’: Row and column dimensions.
+
+     ncol ‘signature(x = "AffyBatch")’: An accessor function for
+          ‘ncol’.
+
+     nrow ‘signature(x = "AffyBatch")’: an accessor function for
+          ‘nrow’.
+
+     normalize ‘signature(object = "AffyBatch")’: a method to
+          ‘normalize’. The method accepts an argument ‘method’. The
+          default methods is specified in package options (see the main
+          vignette).
+
+     normalize.methods ‘signature(object = "AffyBatch")’: returns the
+          normalization methods defined for this class. See
+          ‘normalize’.
+
+     probeNames ‘signature(object = "AffyBatch")’: returns the probe
+          set associated with each row of the intensity matrix.
+
+     probeset ‘signature(object = "AffyBatch",genenames=NULL,
+          locations=NULL)’: Extracts ‘ProbeSet’ objects related to the
+          probe sets given in genenames. If an alternative set of
+          locations defining pms and mms a list with those locations
+          should be passed via the ‘locations’ argument.
+
+     bg.correct ‘signature(object = "AffyBatch", method="character")’
+          applies background correction methods defined by method.
+
+     updateObject ‘signature(object = "AffyBatch", ...,
+          verbose=FALSE)’: update, if necessary, an object of class
+          AffyBatch to its current class definition. ‘verbose=TRUE’
+          provides details about the conversion process.
+
+_N_o_t_e:
+
+     This class is better described in the vignette.
+
+_S_e_e _A_l_s_o:
+
+     related methods ‘merge.AffyBatch’, ‘pairs.AffyBatch’, and ‘eSet’
+
+_E_x_a_m_p_l_e_s:
+
+     if (require(affydata)) {
+       ## load example
+       data(Dilution)
+     
+       ## nice print
+       print(Dilution)
+     
+       pm(Dilution)[1:5,]
+       mm(Dilution)[1:5,]
+     
+       ## get indexes for the PM probes for the affyID "1900_at" 
+       mypmindex <- pmindex(Dilution,"1900_at")
+       ## same operation using the primitive
+       mypmindex <- indexProbes(Dilution, which="pm", genenames="1900_at")[[1]]
+       ## get the probe intensities from the index
+       intensity(Dilution)[mypmindex, ]
+     
+       description(Dilution) ##we can also use the methods of eSet
+       sampleNames(Dilution)
+       abstract(Dilution)
+     }
+     
+
+> 
+> ### Dimensions
+> dim(dat)
+Rows Cols 
+ 640  640 
+> 
+> ### Structure
+> str(dat)
+Formal class 'AffyBatch' [package "affy"] with 10 slots
+  ..@ cdfName          : chr "HG_U95A"
+  ..@ nrow             : Named int 640
+  .. ..- attr(*, "names")= chr "Rows"
+  ..@ ncol             : Named int 640
+  .. ..- attr(*, "names")= chr "Cols"
+  ..@ assayData        :<environment: 0x7f80e4614038> 
+  ..@ phenoData        :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
+  .. .. ..@ varMetadata      :'data.frame':	1 obs. of  1 variable:
+  .. .. .. ..$ labelDescription: chr "arbitrary numbering"
+  .. .. ..@ data             :'data.frame':	13 obs. of  1 variable:
+  .. .. .. ..$ sample: int [1:13] 1 2 3 4 5 6 7 8 9 10 ...
+  .. .. ..@ dimLabels        : chr [1:2] "sampleNames" "sampleColumns"
+  .. .. ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slots
+  .. .. .. .. ..@ .Data:List of 1
+  .. .. .. .. .. ..$ : int [1:3] 1 1 0
+  ..@ featureData      :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
+  .. .. ..@ varMetadata      :'data.frame':	0 obs. of  1 variable:
+  .. .. .. ..$ labelDescription: chr(0) 
+  .. .. ..@ data             :'data.frame':	409600 obs. of  0 variables
+  .. .. ..@ dimLabels        : chr [1:2] "featureNames" "featureColumns"
+  .. .. ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slots
+  .. .. .. .. ..@ .Data:List of 1
+  .. .. .. .. .. ..$ : int [1:3] 1 1 0
+  ..@ experimentData   :Formal class 'MIAME' [package "Biobase"] with 13 slots
+  .. .. ..@ name             : chr ""
+  .. .. ..@ lab              : chr ""
+  .. .. ..@ contact          : chr ""
+  .. .. ..@ title            : chr ""
+  .. .. ..@ abstract         : chr ""
+  .. .. ..@ url              : chr ""
+  .. .. ..@ pubMedIds        : chr ""
+  .. .. ..@ samples          : list()
+  .. .. ..@ hybridizations   : list()
+  .. .. ..@ normControls     : list()
+  .. .. ..@ preprocessing    :List of 2
+  .. .. .. ..$ filenames  : chr [1:13] "./data/raw//GSM133995.CEL.gz" "./data/raw//GSM134000.CEL.gz" "./data/raw//GSM134015.CEL.gz" "./data/raw//GSM134050.CEL.gz" ...
+  .. .. .. ..$ affyversion: chr NA
+  .. .. ..@ other            :List of 1
+  .. .. .. ..$ : chr ""
+  .. .. ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slots
+  .. .. .. .. ..@ .Data:List of 2
+  .. .. .. .. .. ..$ : int [1:3] 1 0 0
+  .. .. .. .. .. ..$ : int [1:3] 1 1 0
+  ..@ annotation       : chr "hgu95a"
+  ..@ protocolData     :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
+  .. .. ..@ varMetadata      :'data.frame':	1 obs. of  1 variable:
+  .. .. .. ..$ labelDescription: chr NA
+  .. .. ..@ data             :'data.frame':	13 obs. of  1 variable:
+  .. .. .. ..$ ScanDate: chr [1:13] "07/13/ 11:25:32" "06/29/ 12:47:12" "06/29/ 12:26:42" "06/29/ 12:54:44" ...
+  .. .. ..@ dimLabels        : chr [1:2] "sampleNames" "sampleColumns"
+  .. .. ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slots
+  .. .. .. .. ..@ .Data:List of 1
+  .. .. .. .. .. ..$ : int [1:3] 1 1 0
+  ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slots
+  .. .. ..@ .Data:List of 4
+  .. .. .. ..$ : int [1:3] 3 0 3
+  .. .. .. ..$ : int [1:3] 2 22 0
+  .. .. .. ..$ : int [1:3] 1 3 0
+  .. .. .. ..$ : int [1:3] 1 2 0
+> 
+> ### Information about the platform
+> annotation(dat)
+[1] "hgu95a"
+> 
+> ### Information about the features
+> head(featureData(dat))
+An object of class 'AnnotatedDataFrame': none
+> 
+> ### Information about the samples
+> pData(dat)
+                 sample
+GSM133995.CEL.gz      1
+GSM134000.CEL.gz      2
+GSM134015.CEL.gz      3
+GSM134050.CEL.gz      4
+GSM134060.CEL.gz      5
+GSM134070.CEL.gz      6
+GSM44082.CEL.gz       7
+GSM44083.CEL.gz       8
+GSM44084.CEL.gz       9
+GSM44088.CEL.gz      10
+GSM44089.CEL.gz      11
+GSM44091.CEL.gz      12
+GSM44092.CEL.gz      13
+> 
+> 
+> ###################################################
+> ### Read the phenotype data associated with the experiment
+> ### Note the use of colClasses
+> pheno <- read.table('./data/targets.txt',sep='\t',header=T,
++ 		    colClasses=c("character", "character",
++ 		    "factor","factor","character"))
+> 
+> 
+> ###################################################
+> ### Let's have a look into the phenotypic information
+> str(pheno)
+'data.frame':	13 obs. of  5 variables:
+ $ Name      : chr  "GSM133995.CEL.gz" "GSM134000.CEL.gz" "GSM134015.CEL.gz" "GSM134050.CEL.gz" ...
+ $ CellLine  : chr  "MCF7" "MDA-MB-231" "T-47D" "COLO205" ...
+ $ CancerType: Factor w/ 4 levels "breast","Burkitt",..: 1 1 1 3 3 3 2 2 2 4 ...
+ $ CellType  : Factor w/ 2 levels "Epithelial","Lymphocytes": 1 1 1 1 1 1 2 2 2 2 ...
+ $ Comment   : chr  "Breast cancer cell line" "Breast cancer cell line" "Breast cancer cell line" "Colon cancer cell line" ...
+> 
+> ### Let's get summarize the data
+> summary(pheno)
+     Name             CellLine           CancerType        CellType
+ Length:13          Length:13          breast :3    Epithelial :6  
+ Class :character   Class :character   Burkitt:3    Lymphocytes:7  
+ Mode  :character   Mode  :character   colon  :3                   
+                                       DLBCL  :4                   
+   Comment         
+ Length:13         
+ Class :character  
+ Mode  :character  
+                   
+> 
+> ### Factor are very useful!
+> table(pheno$CancerType, pheno$CellType)
+         
+          Epithelial Lymphocytes
+  breast           3           0
+  Burkitt          0           3
+  colon            3           0
+  DLBCL            0           4
+> 
+> plot(pheno$CancerType, pheno$CellType)
+> 
+> 
+> ###################################################
+> ### We can add phenotypic information to the AffyBatch object
+> if(all(rownames(pData(dat))==pheno$Name)){
++ 	print("You're good, go ahead!")
++ 	pheno <- merge(pData(dat), pheno, by.x=0, by.y='Name', sort=FALSE)
++ 	rownames(pheno) <- pheno[,"Row.names"]
++ 	pData(dat) <- pheno
++ }else{
++ 	print("Check order of rows in pData(object) and pheno data provided!")
++ }
+[1] "You're good, go ahead!"
+> 
+> ### Now pData(dat) is the merged object
+> pData(dat)
+                        Row.names sample   CellLine CancerType    CellType
+GSM133995.CEL.gz GSM133995.CEL.gz      1       MCF7     breast  Epithelial
+GSM134000.CEL.gz GSM134000.CEL.gz      2 MDA-MB-231     breast  Epithelial
+GSM134015.CEL.gz GSM134015.CEL.gz      3      T-47D     breast  Epithelial
+GSM134050.CEL.gz GSM134050.CEL.gz      4    COLO205      colon  Epithelial
+GSM134060.CEL.gz GSM134060.CEL.gz      5    HCT-116      colon  Epithelial
+GSM134070.CEL.gz GSM134070.CEL.gz      6       HT29      colon  Epithelial
+GSM44082.CEL.gz   GSM44082.CEL.gz      7      Ramos    Burkitt Lymphocytes
+GSM44083.CEL.gz   GSM44083.CEL.gz      8      P3HR1    Burkitt Lymphocytes
+GSM44084.CEL.gz   GSM44084.CEL.gz      9      ST486    Burkitt Lymphocytes
+GSM44088.CEL.gz   GSM44088.CEL.gz     10        Ly1      DLBCL Lymphocytes
+GSM44089.CEL.gz   GSM44089.CEL.gz     11       Ly10      DLBCL Lymphocytes
+GSM44091.CEL.gz   GSM44091.CEL.gz     12        Ly4      DLBCL Lymphocytes
+GSM44092.CEL.gz   GSM44092.CEL.gz     13        Ly7      DLBCL Lymphocytes
+                                                 Comment
+GSM133995.CEL.gz                 Breast cancer cell line
+GSM134000.CEL.gz                 Breast cancer cell line
+GSM134015.CEL.gz                 Breast cancer cell line
+GSM134050.CEL.gz                  Colon cancer cell line
+GSM134060.CEL.gz                  Colon cancer cell line
+GSM134070.CEL.gz                  Colon cancer cell line
+GSM44082.CEL.gz               Burkitt lymphoma cell line
+GSM44083.CEL.gz               Burkitt lymphoma cell line
+GSM44084.CEL.gz               Burkitt lymphoma cell line
+GSM44088.CEL.gz  Diffuse large B cell lymphoma cell line
+GSM44089.CEL.gz  Diffuse large B cell lymphoma cell line
+GSM44091.CEL.gz  Diffuse large B cell lymphoma cell line
+GSM44092.CEL.gz  Diffuse large B cell lymphoma cell line
+> 
+> 
+> ###################################################
+> ### We can now normalize the data, for instance the  rma() function
+> ### Alternatives you want to look into are frma() and gcrma()
+> dat.rma <- rma(dat)
+Background correcting
+Normalizing
+Calculating Expression
+> 
+> 
+> ###################################################
+> ### Check the new object after normalization
+> class(dat.rma)
+[1] "ExpressionSet"
+attr(,"package")
+[1] "Biobase"
+> 
+> ### Nevertheless the following methods still work:
+> pData(dat.rma)
+                        Row.names sample   CellLine CancerType    CellType
+GSM133995.CEL.gz GSM133995.CEL.gz      1       MCF7     breast  Epithelial
+GSM134000.CEL.gz GSM134000.CEL.gz      2 MDA-MB-231     breast  Epithelial
+GSM134015.CEL.gz GSM134015.CEL.gz      3      T-47D     breast  Epithelial
+GSM134050.CEL.gz GSM134050.CEL.gz      4    COLO205      colon  Epithelial
+GSM134060.CEL.gz GSM134060.CEL.gz      5    HCT-116      colon  Epithelial
+GSM134070.CEL.gz GSM134070.CEL.gz      6       HT29      colon  Epithelial
+GSM44082.CEL.gz   GSM44082.CEL.gz      7      Ramos    Burkitt Lymphocytes
+GSM44083.CEL.gz   GSM44083.CEL.gz      8      P3HR1    Burkitt Lymphocytes
+GSM44084.CEL.gz   GSM44084.CEL.gz      9      ST486    Burkitt Lymphocytes
+GSM44088.CEL.gz   GSM44088.CEL.gz     10        Ly1      DLBCL Lymphocytes
+GSM44089.CEL.gz   GSM44089.CEL.gz     11       Ly10      DLBCL Lymphocytes
+GSM44091.CEL.gz   GSM44091.CEL.gz     12        Ly4      DLBCL Lymphocytes
+GSM44092.CEL.gz   GSM44092.CEL.gz     13        Ly7      DLBCL Lymphocytes
+                                                 Comment
+GSM133995.CEL.gz                 Breast cancer cell line
+GSM134000.CEL.gz                 Breast cancer cell line
+GSM134015.CEL.gz                 Breast cancer cell line
+GSM134050.CEL.gz                  Colon cancer cell line
+GSM134060.CEL.gz                  Colon cancer cell line
+GSM134070.CEL.gz                  Colon cancer cell line
+GSM44082.CEL.gz               Burkitt lymphoma cell line
+GSM44083.CEL.gz               Burkitt lymphoma cell line
+GSM44084.CEL.gz               Burkitt lymphoma cell line
+GSM44088.CEL.gz  Diffuse large B cell lymphoma cell line
+GSM44089.CEL.gz  Diffuse large B cell lymphoma cell line
+GSM44091.CEL.gz  Diffuse large B cell lymphoma cell line
+GSM44092.CEL.gz  Diffuse large B cell lymphoma cell line
+> annotation(dat.rma)
+[1] "hgu95a"
+> head(featureData(dat.rma))
+An object of class 'AnnotatedDataFrame': none
+> dim(dat.rma)
+Features  Samples 
+   12626       13 
+> 
+> ###################################################
+> ### Now we can save the two objects before going ahead
+> save(dat, dat.rma, file="./objs/affyData.rda")
+> 
+> 
+> 
+> ##################################################
+> ##################################################
+> ### Differential Gene Expression Analysis
+> ##################################################
+> ##################################################
+> 
+> 
+> ###################################################
+> ### To create the design matrix  to fit the linear model we start
+> ### combining all levels of our factors of interest
+> groups <- factor(paste(pheno$CancerType, pheno$CellType, sep="."))
+> 
+> ### Count the number of sample per group
+> table(groups)
+groups
+  breast.Epithelial Burkitt.Lymphocytes    colon.Epithelial   DLBCL.Lymphocytes 
+                  3                   3                   3                   4 
+> 
+> ### Create the design matrix
+> dMat <- model.matrix(~0+groups)
+> colnames(dMat) <- levels(groups)
+> 
+> ### This is the design matrix
+> dMat
+   breast.Epithelial Burkitt.Lymphocytes colon.Epithelial DLBCL.Lymphocytes
+1                  1                   0                0                 0
+2                  1                   0                0                 0
+3                  1                   0                0                 0
+4                  0                   0                1                 0
+5                  0                   0                1                 0
+6                  0                   0                1                 0
+7                  0                   1                0                 0
+8                  0                   1                0                 0
+9                  0                   1                0                 0
+10                 0                   0                0                 1
+11                 0                   0                0                 1
+12                 0                   0                0                 1
+13                 0                   0                0                 1
+attr(,"assign")
+[1] 1 1 1 1
+attr(,"contrasts")
+attr(,"contrasts")$groups
+[1] "contr.treatment"
+
+> 
+> ###In reality we could just use the informations in
+> ## the pheno$CancerType factor, which is equivalent
+> table(pheno$CancerType)
+
+ breast Burkitt   colon   DLBCL 
+      3       3       3       4 
+> dMat2 <- model.matrix(~0+pheno$CancerType)
+> colnames(dMat2) <- levels(pheno$CancerType)
+> 
+> ### This is the second design matrix
+> dMat2
+   breast Burkitt colon DLBCL
+1       1       0     0     0
+2       1       0     0     0
+3       1       0     0     0
+4       0       0     1     0
+5       0       0     1     0
+6       0       0     1     0
+7       0       1     0     0
+8       0       1     0     0
+9       0       1     0     0
+10      0       0     0     1
+11      0       0     0     1
+12      0       0     0     1
+13      0       0     0     1
+attr(,"assign")
+[1] 1 1 1 1
+attr(,"contrasts")
+attr(,"contrasts")$`pheno$CancerType`
+[1] "contr.treatment"
+
+> 
+> ###As you can see they are exactly the same
+> dMat==dMat2
+   breast.Epithelial Burkitt.Lymphocytes colon.Epithelial DLBCL.Lymphocytes
+1               TRUE                TRUE             TRUE              TRUE
+2               TRUE                TRUE             TRUE              TRUE
+3               TRUE                TRUE             TRUE              TRUE
+4               TRUE                TRUE             TRUE              TRUE
+5               TRUE                TRUE             TRUE              TRUE
+6               TRUE                TRUE             TRUE              TRUE
+7               TRUE                TRUE             TRUE              TRUE
+8               TRUE                TRUE             TRUE              TRUE
+9               TRUE                TRUE             TRUE              TRUE
+10              TRUE                TRUE             TRUE              TRUE
+11              TRUE                TRUE             TRUE              TRUE
+12              TRUE                TRUE             TRUE              TRUE
+13              TRUE                TRUE             TRUE              TRUE
+> 
+> 
+> ###################################################
+> ### Let's create now a contrast matrix to extract differences between coefficients
+> 
+> #### A contrast matrix using the first design matrix
+> cMat <- makeContrasts(levels=colnames(dMat),
++ 			 CellType=( ((colon.Epithelial + breast.Epithelial)/2) -
++ 				   ((Burkitt.Lymphocytes + DLBCL.Lymphocytes)/2) ),
++ 			 CancerType.Epithelial=( colon.Epithelial - breast.Epithelial ),
++ 			 CancerType.Lyphocytes=( Burkitt.Lymphocytes-DLBCL.Lymphocytes )
++ 			 )
+> 
+> ### All coefficients that were combine contribute equally:
+> ### the columns sum must be equal to 0
+> cMat
+                     Contrasts
+Levels                CellType CancerType.Epithelial CancerType.Lyphocytes
+  breast.Epithelial        0.5                    -1                     0
+  Burkitt.Lymphocytes     -0.5                     0                     1
+  colon.Epithelial         0.5                     1                     0
+  DLBCL.Lymphocytes       -0.5                     0                    -1
+> apply(cMat, 2, sum)
+             CellType CancerType.Epithelial CancerType.Lyphocytes 
+                    0                     0                     0 
+> 
+> 
+> ### A contrast matrix using the second design matrix
+> cMat2 <- makeContrasts(levels=colnames(dMat2),
++ 		       CellType=( ((colon + breast)/2) - ((Burkitt + DLBCL)/2) ),
++ 		       CancerType.Epithelial=( colon - breast ),
++ 		       CancerType.Lyphocytes=( Burkitt - DLBCL )
++ 			 )
+> 
+> ### Also in this case all the coefficients that were combine must contribute equally:
+> ### the columns sum again must be  equal to 0
+> cMat2
+         Contrasts
+Levels    CellType CancerType.Epithelial CancerType.Lyphocytes
+  breast       0.5                    -1                     0
+  Burkitt     -0.5                     0                     1
+  colon        0.5                     1                     0
+  DLBCL       -0.5                     0                    -1
+> apply(cMat2, 2, sum)
+             CellType CancerType.Epithelial CancerType.Lyphocytes 
+                    0                     0                     0 
+> 
+> ### The two contrasts matrices are the same
+> cMat==cMat2
+                     Contrasts
+Levels                CellType CancerType.Epithelial CancerType.Lyphocytes
+  breast.Epithelial       TRUE                  TRUE                  TRUE
+  Burkitt.Lymphocytes     TRUE                  TRUE                  TRUE
+  colon.Epithelial        TRUE                  TRUE                  TRUE
+  DLBCL.Lymphocytes       TRUE                  TRUE                  TRUE
+> 
+> 
+> ###################################################
+> ### Fit the model using the first design and contrast matrices
+> ### You might want to learn about lmFit() and contrasts.fit()
+> fit.ls <- lmFit(dat.rma, dMat, method="ls")
+> fit.ls <- contrasts.fit(fit.ls, cMat)
+> 
+> 
+> ###################################################
+> ### Fit the model using the second design matrix and contrast matrices
+> fit2.ls <- lmFit(dat.rma, dMat2, method="ls")
+> fit2.ls <- contrasts.fit(fit2.ls, cMat2)
+> 
+> 
+> ###################################################
+> ### Moderation of standard errors using empirical Bayes
+> eb.ls <- eBayes(fit.ls, proportion=0.01)
+> 
+> 
+> ###################################################
+> ### Moderation of standard errors using empirical Bayes
+> eb2.ls <- eBayes(fit2.ls, proportion=0.01)
+> 
+> 
+> ###################################################
+> ### With the following you can write the complete linear model analysis
+> ### results to a file in a tabular format
+> write.fit(eb.ls, file="./text/anovaTable.txt")
+> 
+> 
+> ###################################################
+> ### You can retrieve the top differentially expressed genes for a specific
+> ### contrast in the contrast matrix by name
+> tG <- topTable(eb.ls, coef="CellType", number=10, resort="logFC")
+> tG <- tG[order(tG$ID),]
+Error in .Method(..., na.last = na.last, decreasing = decreasing) : 
+  argument 1 is not a vector
+Calls: [ ... order -> standardGeneric -> eval -> eval -> eval -> .Method
+Execution halted

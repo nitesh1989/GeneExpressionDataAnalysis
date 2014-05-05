@@ -1,0 +1,23 @@
+README for affyData
+
+Driver sweave file in affyData.Rnw
+
+Directory Structure:
+data:
+   Data for the project. In Data/raw/ are located the raw data files used as input
+objs:
+   Analysis results, including intermediate step analysis and simulated datasets.
+code:
+   Source code for the analysis.
+html:
+   Results files in html format from the analysis.
+text:
+   Description of methods and results.
+figs:
+   Figures
+misc:
+   Additional objects needed (i.e. annotation, clinical tables, ...).
+misc/refs:
+   External supporting documentation to the project.
+
+Please add a brief explaination to this README file for any directory you may add

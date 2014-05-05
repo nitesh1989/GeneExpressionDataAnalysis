@@ -1,0 +1,239 @@
+__Author: Luigi Marchionni, May 6th 2014__
+
+
+Goal: from Affymetrix raw data stored in CEL files to differential gene expression
+========================================================
+
+
+### Some Basics
+
+Getting  the working directory, in my case
+
+```{r getwd}
+getwd()
+```
+
+Setting the working directory, in my case:
+```{r setwd,eval=TRUE}
+setwd("~/Documents/GeneExpressionDataAnalysis/affyData/")
+````
+
+Check the date
+
+```{r checkDate}
+date()
+```
+
+Clear the workspace, note the two "embedded" functions
+```{r clearWorkSpace}
+rm(list=ls())
+```
+
+Load the libraries needed for the analysis, note the use of "require"
+```{r loadLibraries}
+require(affy)
+require(hgu95a.db)
+```
+
+
+
+### Load data previously saved, and check their classes
+
+```{r loadPreviousData}
+load("./objs/affyData.rda")
+```
+
+
+Check the the workspace content
+```{r checkWorkspace}
+ls()
+```
+
+Check classes
+```{r checkClasses}
+class(dat)
+
+### Note: dat.rma is an ExpresssionSet, which is a 
+class(dat.rma)
+```
+
+Access to data in the class
+---------------------------
+
+Slots/elements contained in the two classes can be seen using:
+__NOTE: SLOT NAMES USUALLY WORK AS ACCESSORS__
+```{r slotNames}
+slotNames(dat)
+slotNames(dat.rma)
+```
+
+The **exprs** extracts normalized and summarized gene expression
+```{r expressionMatrix}
+dat.expr <- exprs(dat.rma)
+dim(dat.expr)
+```
+
+The **pData** function extracts the phenotypic information
+```{r}
+pData(dat.rma)
+```
+The **annotation** function extracts features information
+```{r}
+annotation(dat.rma)
+```
+
+The **pm** function extracts perfect match probe intensities.
+_Perfect match probes are intended to match perfectly the target sequence_.
+```{r}
+dat.pm <- pm(dat)
+dim(dat.pm)
+```
+
+The **mm** extract mismatch probe intensities
+_Mismatch probes having one base mismatch with the target sequence intended to account for non-specific binding_
+```{r}
+dat.mm <- mm(dat)
+dim(dat.mm)
+```
+
+MA Plot 
+---------
+
+$M = log_{2}(R/G) = log_{2}(R) - log_{2}(G)$
+$A = \frac{1}{2}log_{2}(R*G) = \frac{1}{2}(log_{2}(R) + log_{2}(G))$
+
+### We can now make an MA-plot
+
+We first define a function to divide the plotting area in rows and columns, 
+if you are unfamiliar with how to set the plotting area, you can use the **?par**.
+```{r makePlotArea}
+mypar <- function (nRow = 1, nCol = 1, ptsExp = 1) {
+  par(mar = c(2, 2, 2, 1))
+	par(oma = c(2, 1, 1, 1))
+	par(mfrow = c(nRow, nCol))
+	par(cex = ptsExp)
+}
+```
+
+
+###################################################
+### We can compute rows and columns number based on the nuber of samples
+### You can do this also manually....
+```{r CHECK_THIS_computeRowsCols}
+nc <- ceiling(sqrt(ncol(dat.rma)))
+nr <- ceiling(ncol(dat.rma)/nc)
+```
+###################################################
+
+
+### We can make a plot for the raw data, before normalization
+```{r MAplot,fig.width=15,fig.height=15}
+mypar(nr,nc,0.5)
+MAplot(dat[,],pairs=F,plot.method="smoothScatter")
+```
+
+We can save the plot to a file,
+```{r saveMAPlot}
+bitmap(file="./figs/MApl.raw.png",width=20, height=10, res = 400)
+mypar(nr,nc,0.5)
+par(oma=c(2,1,1,1))
+MAplot(dat[,],pairs=F,plot.method="smoothScatter")
+dev.off()
+```
+
+
+### MA-plot after normalization
+```{r MAplotAFterNormalization,fig.width=15,fig.height=15}
+mypar(nr,nc,0.5)
+par(oma=c(2,1,1,1))
+a <- exprs(dat.rma)
+for (i in 1:ncol(a)){
+  ma.plot(A=((a[,i]+apply(a,1,median))/2),
+    M=(a[,i]-apply(a,1,median)),
+    show.statistics=TRUE,cex.main=1,
+    span=1/3, family.loess="gaussian", cex = 0.75,
+    plot.method="smoothScatter",add.loess = TRUE,
+    lwd = 2, lty = 2, loess.col = "red",ylim=c(-6,6),
+    main=paste(colnames(a)[i],
+	  '\n vs pseudo-median reference chip'))
+}
+```
+
+
+MA-plot after normalization: saved to a file
+```{r saveMAPlotAfterNormalization}
+bitmap(file='./figs/MApl.rma.png',width=20,height=10,res=400)
+mypar(nr,nc,0.5)
+par(oma=c(2,1,1,1))
+a <- exprs(dat.rma)
+for (i in 1:ncol(a)){
+  ma.plot(A=((a[,i]+apply(a,1,median))/2),
+    M=(a[,i]-apply(a,1,median)),
+    show.statistics=TRUE,cex.main=1,
+    span=1/3, family.loess="gaussian", cex = 0.75,
+    plot.method="smoothScatter",add.loess = TRUE,
+    lwd = 2, lty = 2, loess.col = "red",ylim=c(-6,6),
+    main=paste(colnames(a)[i],
+	  'vs pseudo-median reference chip'))
+}
+dev.off()
+```
+
+
+### Diagnostic Plots: 2D-Image
+
+```{r bitMap,fig.width = 10,fig.height=10}
+bitmap(file="./figs/ima2D.png",width=2*nr, height=2*nc, res = 144)
+mypar(nr,nc,1) ; par(mar=c(1,1,1,1))
+image(dat[,])
+dev.off()
+```
+
+
+### Log2 intensities boxplots: before and after normalization
+```{r boxPlots}
+bitmap(file="./figs/exprBoxplot.png",width=15, height=15, res = 144)
+mypar(2,1,0.75)
+par(mar=c(10,1,1,1))
+### Before
+boxplot(log2(exprs(dat))~col(exprs(dat)),
+	names=pData(dat.rma)[,"Row.names"],
+	las=2,col='blue')
+### After
+boxplot(exprs(dat.rma)~col(exprs(dat.rma)),
+	names=pData(dat.rma)[,"Row.names"],
+	las=2,col='blue')
+### Close the device
+dev.off()
+```
+
+
+### Compute RNA degradation
+```{r RNAdegradation}
+deg <- AffyRNAdeg(dat)
+```
+
+
+### Make RNA degradation plot
+```{r makeRNADegradationPlot}
+bitmap(file="./figs/degRNA.png",width=5, height=5, res = 1000)
+mypar(2,2,0.75)
+plotAffyRNAdeg(deg,cols=c(1:ncol(dat.rma)))
+plot(density(deg$slope),main="Slope")
+boxplot(deg$slope,main="Slope")
+### Close the device
+dev.off()
+```
+
+### Find the scan date
+```{r dateOfScan}
+dateOfScan <- protocolData(dat.rma)@data$ScanDate
+#Don't need the time, so we will remove that using regular expressions
+dateOfScan <- gsub(" .+", "", dateOfScan)
+boxplot(log2(exprs(dat)), col=1+as.numeric(dateOfScan))
+```
+
+### Session information
+```{r sessionInformation}
+sessionInfo()
+```
