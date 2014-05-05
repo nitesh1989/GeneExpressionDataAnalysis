@@ -1,4 +1,4 @@
-__Author: Luigi Marchionni, May 6th 2014__
+__Author: Nitesh Turaga, May 6th 2014__
 
 
 Goal: from Affymetrix raw data stored in CEL files to differential gene expression

@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Goal: Gene Set Analysis</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<p><strong>Author: Nitesh Turaga, May 6th 2014</strong></p>
+
+<h1>Goal: Gene Set Analysis</h1>
+
+<h3>Some Basics</h3>
+
+<p>Getting  the working directory, in my case</p>
+
+<pre><code class="r">getwd()
+</code></pre>
+
+<pre><code>## [1] &quot;/Users/niteshturaga/Documents/GeneExpressionDataAnalysis/GeneSetAnalysis&quot;
+</code></pre>
+
+<p>Setting the working directory, in my case:</p>
+
+<pre><code class="r">setwd(&quot;~/Documents/GeneExpressionDataAnalysis/GeneSetAnalysis/&quot;)
+</code></pre>
+
+<p>Check the date</p>
+
+<pre><code class="r">date()
+</code></pre>
+
+<pre><code>## [1] &quot;Mon May  5 17:22:19 2014&quot;
+</code></pre>
+
+<p>Clear the workspace, note the two &ldquo;embedded&rdquo; functions</p>
+
+<pre><code class="r">rm(list = ls())
+</code></pre>
+
+<h2>Bioconductor</h2>
+
+<p>The following R packages were used to perform our analyses </p>
+
+<ol>
+<li><p><strong>BiocGenerics</strong>: this library implements several generic classes and methods to work with {\Bioc} packages and can be obtained from Bioconductor.</p></li>
+<li><p><strong>Biobase</strong>: this library implements classes and methods to work with genomic data and can be obtained from {\Bioc};</p></li>
+<li><p><strong>limma</strong>: this library provide advanced methods to perform gene expression analysis from raw data to gene set analysis and can be obtained from Bioconductor.</p></li>
+<li><p><strong>RTopper</strong>: this library implements methods to perform integrated gene set analysis across datasets and platforms and can be obtained from Bioconductor.</p></li>
+<li><p><strong>multtest</strong>: this library implements methods to perform multiple test correction and can be obtained from Bioconductor.</p></li>
+<li><p><strong>org.Hs.eg.db</strong>: this library contains human genes annotation and can be obtained from Bioconductor.</p></li>
+<li><p><strong>KEGG.db</strong>: this library contains KEGG pathway annotation and can be obtained from Bioconductor.</p></li>
+<li><p><strong>reactome.db</strong>: this library contains Reactome pathway annotation and can be obtained from Bioconductor.</p></li>
+<li><p><strong>GO.db</strong>: this library contains Gene Ontoogy annotation and can be obtained from Bioconductor.</p></li>
+<li><p><strong>AnnotationDBI</strong> and <strong>annotate</strong>: these libraries contain classes and methods to access and manipulated annotation packages and can be obtained from Bioconductor.</p></li>
+</ol>
+
+<p>Source the biocLite.R script from Bioconductor</p>
+
+<pre><code class="r">source(&quot;http://bioconductor.org/biocLite.R&quot;)
+</code></pre>
+
+<pre><code>## Bioconductor version 2.13 (BiocInstaller 1.12.1), ?biocLite for help
+## A newer version of Bioconductor is available after installing a new
+##   version of R, ?BiocUpgrade for help
+</code></pre>
+
+<pre><code class="r">### Get the list of available packages
+installedPckgs &lt;- installed.packages()[, &quot;Package&quot;]
+### Define the list of desired libraries
+pckgListBIOC &lt;- c(&quot;BiocGenerics&quot;, &quot;Biobase&quot;, &quot;limma&quot;, &quot;RTopper&quot;, &quot;org.Hs.eg.db&quot;, 
+    &quot;AnnotationDbi&quot;, &quot;annotate&quot;, &quot;multtest&quot;, &quot;KEGG.db&quot;, &quot;GO.db&quot;)
+### Load the packages, install them from Bioconductor if needed
+for (pckg in pckgListBIOC) {
+    if (!pckg %in% installedPckgs) {
+        biocLite(pckg, suppressUpdates = TRUE, ask = FALSE)
+    }
+    require(pckg, character.only = TRUE)
+}
+</code></pre>
+
+<pre><code>## Loading required package: BiocGenerics
+## Loading required package: parallel
+## 
+## Attaching package: &#39;BiocGenerics&#39;
+## 
+## The following objects are masked from &#39;package:parallel&#39;:
+## 
+##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+##     clusterExport, clusterMap, parApply, parCapply, parLapply,
+##     parLapplyLB, parRapply, parSapply, parSapplyLB
+## 
+## The following object is masked from &#39;package:stats&#39;:
+## 
+##     xtabs
+## 
+## The following objects are masked from &#39;package:base&#39;:
+## 
+##     anyDuplicated, append, as.data.frame, as.vector, cbind,
+##     colnames, duplicated, eval, evalq, Filter, Find, get,
+##     intersect, is.unsorted, lapply, Map, mapply, match, mget,
+##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+##     rbind, Reduce, rep.int, rownames, sapply, setdiff, sort,
+##     table, tapply, union, unique, unlist
+## 
+## Loading required package: Biobase
+## Welcome to Bioconductor
+## 
+##     Vignettes contain introductory material; view with
+##     &#39;browseVignettes()&#39;. To cite Bioconductor, see
+##     &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.
+## 
+## Loading required package: limma
+## 
+## Attaching package: &#39;limma&#39;
+## 
+## The following object is masked from &#39;package:BiocGenerics&#39;:
+## 
+##     plotMA
+## 
+## Loading required package: RTopper
+## Loading required package: org.Hs.eg.db
+## Loading required package: AnnotationDbi
+## Loading required package: DBI
+## 
+## Loading required package: annotate
+## Loading required package: multtest
+## Loading required package: KEGG.db
+## 
+## KEGG.db contains mappings based on older data because the original
+##   resource was removed from the the public domain before the most
+##   recent update was produced. This package should now be
+##   considered deprecated and future versions of Bioconductor may
+##   not have it available.  Users who want more current data are
+##   encouraged to look at the KEGGREST or reactome.db packages
+## 
+## Loading required package: GO.db
+</code></pre>
+
+<h3>code chunk number 3: Load Data and packages required</h3>
+
+<pre><code class="r">require(RTopper)
+data(sepScores)
+ls()
+</code></pre>
+
+<pre><code>## [1] &quot;installedPckgs&quot; &quot;pckg&quot;           &quot;pckgListBIOC&quot;   &quot;sepScores&quot;
+</code></pre>
+
+<pre><code class="r">class(sepScores)
+</code></pre>
+
+<pre><code>## [1] &quot;list&quot;
+</code></pre>
+
+<pre><code class="r">names(sepScores)
+</code></pre>
+
+<pre><code>## [1] &quot;dat.affy&quot;       &quot;dat.agilent&quot;    &quot;dat.cnvHarvard&quot; &quot;dat.cnvMskcc&quot;
+</code></pre>
+
+<pre><code class="r">sapply(sepScores, class)
+</code></pre>
+
+<pre><code>##       dat.affy    dat.agilent dat.cnvHarvard   dat.cnvMskcc 
+##      &quot;numeric&quot;      &quot;numeric&quot;      &quot;numeric&quot;      &quot;numeric&quot;
+</code></pre>
+
+<pre><code class="r">sapply(sepScores, dim)
+</code></pre>
+
+<pre><code>## $dat.affy
+## NULL
+## 
+## $dat.agilent
+## NULL
+## 
+## $dat.cnvHarvard
+## NULL
+## 
+## $dat.cnvMskcc
+## NULL
+</code></pre>
+
+<h3>code chunk number 4: metaData</h3>
+
+<pre><code class="r">require(org.Hs.eg.db)
+org.Hs.eg()
+</code></pre>
+
+<pre><code>## Quality control information for org.Hs.eg:
+## 
+## 
+## This package has the following mappings:
+## 
+## org.Hs.egACCNUM has 31277 mapped keys (of 46265 keys)
+## org.Hs.egACCNUM2EG has 629908 mapped keys (of 629908 keys)
+## org.Hs.egALIAS2EG has 99696 mapped keys (of 99696 keys)
+## org.Hs.egCHR has 45772 mapped keys (of 46265 keys)
+## org.Hs.egCHRLENGTHS has 93 mapped keys (of 93 keys)
+## org.Hs.egCHRLOC has 23648 mapped keys (of 46265 keys)
+## org.Hs.egCHRLOCEND has 23648 mapped keys (of 46265 keys)
+## org.Hs.egENSEMBL has 25125 mapped keys (of 46265 keys)
+## org.Hs.egENSEMBL2EG has 27388 mapped keys (of 27388 keys)
+## org.Hs.egENSEMBLPROT has 19731 mapped keys (of 46265 keys)
+## org.Hs.egENSEMBLPROT2EG has 101504 mapped keys (of 101504 keys)
+## org.Hs.egENSEMBLTRANS has 21903 mapped keys (of 46265 keys)
+## org.Hs.egENSEMBLTRANS2EG has 164611 mapped keys (of 164611 keys)
+## org.Hs.egENZYME has 2230 mapped keys (of 46265 keys)
+## org.Hs.egENZYME2EG has 975 mapped keys (of 975 keys)
+## org.Hs.egGENENAME has 46265 mapped keys (of 46265 keys)
+## org.Hs.egGO has 18105 mapped keys (of 46265 keys)
+## org.Hs.egGO2ALLEGS has 17608 mapped keys (of 17608 keys)
+## org.Hs.egGO2EG has 13737 mapped keys (of 13737 keys)
+## org.Hs.egMAP has 34976 mapped keys (of 46265 keys)
+## org.Hs.egMAP2EG has 2498 mapped keys (of 2498 keys)
+## org.Hs.egOMIM has 15648 mapped keys (of 46265 keys)
+## org.Hs.egOMIM2EG has 19401 mapped keys (of 19401 keys)
+## org.Hs.egPATH has 5870 mapped keys (of 46265 keys)
+## org.Hs.egPATH2EG has 229 mapped keys (of 229 keys)
+## org.Hs.egPFAM has 19052 mapped keys (of 46265 keys)
+## org.Hs.egPMID has 31534 mapped keys (of 46265 keys)
+## org.Hs.egPMID2EG has 394407 mapped keys (of 394407 keys)
+## org.Hs.egPROSITE has 19052 mapped keys (of 46265 keys)
+## org.Hs.egREFSEQ has 30052 mapped keys (of 46265 keys)
+## org.Hs.egREFSEQ2EG has 167407 mapped keys (of 167407 keys)
+## org.Hs.egSYMBOL has 46265 mapped keys (of 46265 keys)
+## org.Hs.egSYMBOL2EG has 46257 mapped keys (of 46257 keys)
+## org.Hs.egUCSCKG has 22914 mapped keys (of 46265 keys)
+## org.Hs.egUNIGENE has 24059 mapped keys (of 46265 keys)
+## org.Hs.egUNIGENE2EG has 25484 mapped keys (of 25484 keys)
+## org.Hs.egUNIPROT has 19092 mapped keys (of 46265 keys)
+## 
+## 
+## Additional Information about this package:
+## 
+## DB schema: HUMAN_DB
+## DB schema version: 2.1
+## Organism: Homo sapiens
+## Date for NCBI data: 2013-Sep12
+## Date for GO data: 20130907
+## Date for KEGG data: 2011-Mar15
+## Date for Golden Path data: 2010-Mar22
+## Date for Ensembl data: 2013-Sep3
+</code></pre>
+
+<h3>code chunk number 5: list FGS (Functional Gene Set)</h3>
+
+<pre><code class="r">kegg &lt;- as.list(org.Hs.egPATH2EG)
+length(kegg)
+</code></pre>
+
+<pre><code>## [1] 229
+</code></pre>
+
+<pre><code class="r">str(kegg[1:5])
+</code></pre>
+
+<pre><code>## List of 5
+##  $ 04610: chr [1:69] &quot;2&quot; &quot;462&quot; &quot;623&quot; &quot;624&quot; ...
+##  $ 00232: chr [1:7] &quot;9&quot; &quot;10&quot; &quot;1544&quot; &quot;1548&quot; ...
+##  $ 00983: chr [1:52] &quot;9&quot; &quot;10&quot; &quot;978&quot; &quot;1066&quot; ...
+##  $ 01100: chr [1:1130] &quot;9&quot; &quot;10&quot; &quot;15&quot; &quot;18&quot; ...
+##  $ 00380: chr [1:42] &quot;15&quot; &quot;26&quot; &quot;38&quot; &quot;39&quot; ...
+</code></pre>
+
+<pre><code class="r">names(kegg)[1:5]
+</code></pre>
+
+<pre><code>## [1] &quot;04610&quot; &quot;00232&quot; &quot;00983&quot; &quot;01100&quot; &quot;00380&quot;
+</code></pre>
+
+<pre><code class="r">go &lt;- as.list(org.Hs.egGO2ALLEGS)
+length(go)
+</code></pre>
+
+<pre><code>## [1] 17608
+</code></pre>
+
+<pre><code class="r">str(go[1:5])
+</code></pre>
+
+<pre><code>## List of 5
+##  $ GO:0000002: Named chr [1:20] &quot;291&quot; &quot;1763&quot; &quot;1890&quot; &quot;3980&quot; ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:20] &quot;TAS&quot; &quot;IDA&quot; &quot;TAS&quot; &quot;IEA&quot; ...
+##  $ GO:0000003: Named chr [1:1328] &quot;18&quot; &quot;49&quot; &quot;49&quot; &quot;49&quot; ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:1328] &quot;IEA&quot; &quot;IEA&quot; &quot;IMP&quot; &quot;ISS&quot; ...
+##  $ GO:0000012: Named chr [1:9] &quot;3981&quot; &quot;7141&quot; &quot;7515&quot; &quot;23411&quot; ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:9] &quot;IDA&quot; &quot;IDA&quot; &quot;IEA&quot; &quot;IMP&quot; ...
+##  $ GO:0000018: Named chr [1:52] &quot;604&quot; &quot;641&quot; &quot;641&quot; &quot;940&quot; ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:52] &quot;IEA&quot; &quot;IEA&quot; &quot;IMP&quot; &quot;IEA&quot; ...
+##  $ GO:0000019: Named chr [1:4] &quot;641&quot; &quot;4292&quot; &quot;4361&quot; &quot;10111&quot;
+##   ..- attr(*, &quot;names&quot;)= chr [1:4] &quot;IEA&quot; &quot;IEA&quot; &quot;TAS&quot; &quot;IDA&quot;
+</code></pre>
+
+<pre><code class="r">names(go)[1:5]
+</code></pre>
+
+<pre><code>## [1] &quot;GO:0000002&quot; &quot;GO:0000003&quot; &quot;GO:0000012&quot; &quot;GO:0000018&quot; &quot;GO:0000019&quot;
+</code></pre>
+
+<h3>code chunk number 6: convertIDs</h3>
+
+<pre><code class="r">numberOfFGSkegg &lt;- 200
+kegg &lt;- lapply(kegg[sample(1:length(kegg), numberOfFGSkegg)], function(x) unique(unlist(mget(x, 
+    org.Hs.egSYMBOL))))
+str(kegg[1:5])
+</code></pre>
+
+<pre><code>## List of 5
+##  $ 00140: chr [1:56] &quot;STS&quot; &quot;AKR1C4&quot; &quot;COMT&quot; &quot;CYP1A1&quot; ...
+##  $ 00340: chr [1:29] &quot;AOC1&quot; &quot;ALDH2&quot; &quot;ALDH3A1&quot; &quot;ALDH1B1&quot; ...
+##  $ 00650: chr [1:30] &quot;ABAT&quot; &quot;ACADS&quot; &quot;ACAT1&quot; &quot;ACAT2&quot; ...
+##  $ 05142: chr [1:104] &quot;ADCY1&quot; &quot;AKT1&quot; &quot;AKT2&quot; &quot;FAS&quot; ...
+##  $ 00640: chr [1:32] &quot;ABAT&quot; &quot;ACACA&quot; &quot;ACACB&quot; &quot;ACADM&quot; ...
+</code></pre>
+
+<pre><code class="r">### Process GO: keep only Biological Process
+length(go)
+</code></pre>
+
+<pre><code>## [1] 17608
+</code></pre>
+
+<pre><code class="r">go &lt;- go[Ontology(names(go)) == &quot;BP&quot;]
+length(go)
+</code></pre>
+
+<pre><code>## [1] 12288
+</code></pre>
+
+<pre><code class="r">numberOfFGSgo &lt;- 200
+go &lt;- lapply(go[sample(1:length(go), numberOfFGSgo)], function(x) unique(unlist(mget(x, 
+    org.Hs.egSYMBOL))))
+str(go[1:5])
+</code></pre>
+
+<pre><code>## List of 5
+##  $ GO:0034970: chr [1:2] &quot;CARM1&quot; &quot;PRMT6&quot;
+##  $ GO:2001236: chr [1:90] &quot;ACVR1&quot; &quot;AGT&quot; &quot;AGTR2&quot; &quot;AKT1&quot; ...
+##  $ GO:0021568: chr [1:2] &quot;GBX2&quot; &quot;HOXA2&quot;
+##  $ GO:1902230: chr [1:22] &quot;BCL2L1&quot; &quot;CD44&quot; &quot;CD74&quot; &quot;CDKN2D&quot; ...
+##  $ GO:0048102: chr [1:6] &quot;BNIP3&quot; &quot;CDKN1B&quot; &quot;CDKN2D&quot; &quot;CTSV&quot; ...
+</code></pre>
+
+<h3>code chunk number 7: annotateFGS</h3>
+
+<pre><code class="r">require(KEGG.db)
+KEGG()
+</code></pre>
+
+<pre><code>## Quality control information for KEGG:
+## 
+## 
+## This package has the following mappings:
+## 
+## KEGGENZYMEID2GO has 3999 mapped keys (of 3999 keys)
+## KEGGEXTID2PATHID has 75100 mapped keys (of 75100 keys)
+## KEGGGO2ENZYMEID has 4129 mapped keys (of 4129 keys)
+## KEGGPATHID2EXTID has 3152 mapped keys (of 3152 keys)
+## KEGGPATHID2NAME has 390 mapped keys (of 390 keys)
+## KEGGPATHNAME2ID has 390 mapped keys (of 390 keys)
+## 
+## 
+## Additional Information about this package:
+## 
+## DB schema: KEGG_DB
+## DB schema version: 2.1
+## Date for KEGG data: 2011-Mar15
+</code></pre>
+
+<pre><code class="r">names(kegg) &lt;- paste(names(kegg), unlist(mget(names(kegg), KEGGPATHID2NAME)), 
+    sep = &quot;.&quot;)
+head(names(kegg), n = 10)
+</code></pre>
+
+<pre><code>##  [1] &quot;00140.Steroid hormone biosynthesis&quot;             
+##  [2] &quot;00340.Histidine metabolism&quot;                     
+##  [3] &quot;00650.Butanoate metabolism&quot;                     
+##  [4] &quot;05142.Chagas disease (American trypanosomiasis)&quot;
+##  [5] &quot;00640.Propanoate metabolism&quot;                    
+##  [6] &quot;04115.p53 signaling pathway&quot;                    
+##  [7] &quot;00260.Glycine, serine and threonine metabolism&quot; 
+##  [8] &quot;04916.Melanogenesis&quot;                            
+##  [9] &quot;00450.Selenocompound metabolism&quot;                
+## [10] &quot;04150.mTOR signaling pathway&quot;
+</code></pre>
+
+<h3>code chunk number 8: listFGS</h3>
+
+<pre><code class="r">require(GO.db)
+GO()
+</code></pre>
+
+<pre><code>## Quality control information for GO:
+## 
+## 
+## This package has the following mappings:
+## 
+## GOBPANCESTOR has 25193 mapped keys (of 25193 keys)
+## GOBPCHILDREN has 14497 mapped keys (of 25193 keys)
+## GOBPOFFSPRING has 14497 mapped keys (of 25193 keys)
+## GOBPPARENTS has 25193 mapped keys (of 25193 keys)
+## GOCCANCESTOR has 3232 mapped keys (of 3232 keys)
+## GOCCCHILDREN has 1070 mapped keys (of 3232 keys)
+## GOCCOFFSPRING has 1070 mapped keys (of 3232 keys)
+## GOCCPARENTS has 3232 mapped keys (of 3232 keys)
+## GOMFANCESTOR has 9602 mapped keys (of 9602 keys)
+## GOMFCHILDREN has 1930 mapped keys (of 9602 keys)
+## GOMFOFFSPRING has 1930 mapped keys (of 9602 keys)
+## GOMFPARENTS has 9602 mapped keys (of 9602 keys)
+## GOOBSOLETE has 1838 mapped keys (of 1838 keys)
+## GOTERM has 38028 mapped keys (of 38028 keys)
+## 
+## 
+## Additional Information about this package:
+## 
+## DB schema: GO_DB
+## DB schema version: 2.1
+## Date for GO data: 20130907
+</code></pre>
+
+<pre><code class="r">names(go) &lt;- paste(names(go), Term(names(go)), sep = &quot;.&quot;)
+head(names(go), n = 10)
+</code></pre>
+
+<pre><code>##  [1] &quot;GO:0034970.histone H3-R2 methylation&quot;                                                             
+##  [2] &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot;                                   
+##  [3] &quot;GO:0021568.rhombomere 2 development&quot;                                                              
+##  [4] &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot;
+##  [5] &quot;GO:0048102.autophagic cell death&quot;                                                                 
+##  [6] &quot;GO:0006043.glucosamine catabolic process&quot;                                                         
+##  [7] &quot;GO:0072272.proximal/distal pattern formation involved in metanephric nephron development&quot;         
+##  [8] &quot;GO:0006270.DNA replication initiation&quot;                                                            
+##  [9] &quot;GO:0046130.purine ribonucleoside catabolic process&quot;                                               
+## [10] &quot;GO:0051933.amino acid uptake involved in synaptic transmission&quot;
+</code></pre>
+
+<h3>code chunk number 9: listFGS</h3>
+
+<pre><code class="r">fgsList &lt;- list(go = go, kegg = kegg)
+str(fgsList$go[1:5])
+</code></pre>
+
+<pre><code>## List of 5
+##  $ GO:0034970.histone H3-R2 methylation                                                             : chr [1:2] &quot;CARM1&quot; &quot;PRMT6&quot;
+##  $ GO:2001236.regulation of extrinsic apoptotic signaling pathway                                   : chr [1:90] &quot;ACVR1&quot; &quot;AGT&quot; &quot;AGTR2&quot; &quot;AKT1&quot; ...
+##  $ GO:0021568.rhombomere 2 development                                                              : chr [1:2] &quot;GBX2&quot; &quot;HOXA2&quot;
+##  $ GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage: chr [1:22] &quot;BCL2L1&quot; &quot;CD44&quot; &quot;CD74&quot; &quot;CDKN2D&quot; ...
+##  $ GO:0048102.autophagic cell death                                                                 : chr [1:6] &quot;BNIP3&quot; &quot;CDKN1B&quot; &quot;CDKN2D&quot; &quot;CTSV&quot; ...
+</code></pre>
+
+<pre><code class="r">str(fgsList$kegg[1:5])
+</code></pre>
+
+<pre><code>## List of 5
+##  $ 00140.Steroid hormone biosynthesis             : chr [1:56] &quot;STS&quot; &quot;AKR1C4&quot; &quot;COMT&quot; &quot;CYP1A1&quot; ...
+##  $ 00340.Histidine metabolism                     : chr [1:29] &quot;AOC1&quot; &quot;ALDH2&quot; &quot;ALDH3A1&quot; &quot;ALDH1B1&quot; ...
+##  $ 00650.Butanoate metabolism                     : chr [1:30] &quot;ABAT&quot; &quot;ACADS&quot; &quot;ACAT1&quot; &quot;ACAT2&quot; ...
+##  $ 05142.Chagas disease (American trypanosomiasis): chr [1:104] &quot;ADCY1&quot; &quot;AKT1&quot; &quot;AKT2&quot; &quot;FAS&quot; ...
+##  $ 00640.Propanoate metabolism                    : chr [1:32] &quot;ABAT&quot; &quot;ACACA&quot; &quot;ACACB&quot; &quot;ACADM&quot; ...
+</code></pre>
+
+<h3>code chunk number 10: runGSEbatchArgs</h3>
+
+<pre><code class="r">args(runBatchGSE)
+</code></pre>
+
+<pre><code>## function (dataList, fgsList, ...) 
+## NULL
+</code></pre>
+
+<h3>code chunk number 11: runBatchGSE.separate</h3>
+
+<pre><code class="r">gseABS.sep &lt;- runBatchGSE(dataList = sepScores, fgsList = fgsList)
+gseABS.sep &lt;- runBatchGSE(dataList = sepScores, fgsList = fgsList, absolute = TRUE, 
+    type = &quot;f&quot;, alternative = &quot;mixed&quot;)
+</code></pre>
+
+<h3>code chunk number 12: runBatchGSE.separate2</h3>
+
+<pre><code class="r">gseUP.sep &lt;- runBatchGSE(dataList = sepScores, fgsList = fgsList, absolute = FALSE, 
+    type = &quot;t&quot;, alternative = &quot;up&quot;)
+gseDW.sep &lt;- runBatchGSE(dataList = sepScores, fgsList = fgsList, absolute = FALSE, 
+    type = &quot;t&quot;, alternative = &quot;down&quot;)
+gseBOTH.sep &lt;- runBatchGSE(dataList = sepScores, fgsList = fgsList, absolute = FALSE, 
+    type = &quot;t&quot;, alternative = &quot;either&quot;)
+</code></pre>
+
+<h3>code chunk number 13: runBatchGSE.int3</h3>
+
+<pre><code class="r">gseABSsim.sep &lt;- runBatchGSE(dataList = sepScores, fgsList = fgsList, absolute = TRUE, 
+    type = &quot;f&quot;, alternative = &quot;mixed&quot;, ranks.only = FALSE, nsim = 1000)
+gseUPsim.sep &lt;- runBatchGSE(dataList = sepScores, fgsList = fgsList, absolute = FALSE, 
+    type = &quot;t&quot;, alternative = &quot;up&quot;, ranks.only = FALSE, nsim = 1000)
+</code></pre>
+
+<h3>code chunk number 14: runBatchGSE.format1</h3>
+
+<pre><code class="r">str(gseUP.sep[1:5])
+</code></pre>
+
+<pre><code>## List of 5
+##  $ dat.affy      :List of 2
+##   ..$ go  : Named num [1:200] NA 0.0527 NA NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 0.318 0.835 0.114 0.197 0.87 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ dat.agilent   :List of 2
+##   ..$ go  : Named num [1:200] NA 0.312 NA NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 0.8688 0.9598 0.188 0.0929 0.9838 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ dat.cnvHarvard:List of 2
+##   ..$ go  : Named num [1:200] NA 0.601 NA NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 0.12 0.25 0.552 0.114 0.602 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ dat.cnvMskcc  :List of 2
+##   ..$ go  : Named num [1:200] NA 0.869 NA NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 0.188 0.573 0.93 0.508 0.751 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ NA            : NULL
+</code></pre>
+
+<pre><code class="r">head(gseABSsim.sep$dat.affy$go)
+</code></pre>
+
+<pre><code>##                                                              GO:0034970.histone H3-R2 methylation 
+##                                                                                                NA 
+##                                    GO:2001236.regulation of extrinsic apoptotic signaling pathway 
+##                                                                                             0.988 
+##                                                               GO:0021568.rhombomere 2 development 
+##                                                                                                NA 
+## GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage 
+##                                                                                                NA 
+##                                                                  GO:0048102.autophagic cell death 
+##                                                                                                NA 
+##                                                          GO:0006043.glucosamine catabolic process 
+##                                                                                                NA
+</code></pre>
+
+<pre><code class="r">head(gseABSsim.sep$dat.affy$kegg)
+</code></pre>
+
+<pre><code>##              00140.Steroid hormone biosynthesis 
+##                                          0.5824 
+##                      00340.Histidine metabolism 
+##                                          0.2268 
+##                      00650.Butanoate metabolism 
+##                                          0.8981 
+## 05142.Chagas disease (American trypanosomiasis) 
+##                                          0.7842 
+##                     00640.Propanoate metabolism 
+##                                          0.2248 
+##                     04115.p53 signaling pathway 
+##                                          0.4296
+</code></pre>
+
+<h3>code chunk number 15: runBatchGSE.altFunc</h3>
+
+<pre><code class="r">require(limma)
+gseUP.sep.2 &lt;- runBatchGSE(dataList = sepScores, fgsList = fgsList, absolute = FALSE, 
+    gseFunc = wilcoxGST, alternative = &quot;up&quot;)
+</code></pre>
+
+<h3>code chunk number 16: runBatchGSE.format2</h3>
+
+<pre><code class="r">str(gseUP.sep.2)
+</code></pre>
+
+<pre><code>## List of 4
+##  $ dat.affy      :List of 2
+##   ..$ go  : Named num [1:200] NA 0.0527 NA NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 0.318 0.835 0.114 0.197 0.87 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ dat.agilent   :List of 2
+##   ..$ go  : Named num [1:200] NA 0.312 NA NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 0.8688 0.9598 0.188 0.0929 0.9838 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ dat.cnvHarvard:List of 2
+##   ..$ go  : Named num [1:200] NA 0.601 NA NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 0.12 0.25 0.552 0.114 0.602 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ dat.cnvMskcc  :List of 2
+##   ..$ go  : Named num [1:200] NA 0.869 NA NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 0.188 0.573 0.93 0.508 0.751 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+</code></pre>
+
+<pre><code class="r">all(gseUP.sep.2$go == gseUP.sep$go)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<h3>code chunk number 17: runBatchGSE.altFunc2</h3>
+
+<pre><code class="r">gseFunc &lt;- function(selected, statistics, threshold) {
+    diffExpGenes &lt;- statistics &gt; threshold
+    tab &lt;- table(diffExpGenes, selected)
+    pVal &lt;- fisher.test(tab)[[&quot;p.value&quot;]]
+}
+gseUP.sep.3 &lt;- runBatchGSE(dataList = sepScores, fgsList = fgsList, absolute = FALSE, 
+    gseFunc = gseFunc, threshold = 7.5)
+</code></pre>
+
+<h3>code chunk number 18: runBatchGSE.format3</h3>
+
+<pre><code class="r">str(gseUP.sep.3)
+</code></pre>
+
+<pre><code>## List of 4
+##  $ dat.affy      :List of 2
+##   ..$ go  : Named num [1:200] NA 1 NA NA NA NA NA NA 1 NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 1 1 1 1 1 1 1 1 NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ dat.agilent   :List of 2
+##   ..$ go  : Named num [1:200] NA 1 NA NA NA NA NA NA 1 NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 1 1 1 1 1 1 1 1 NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ dat.cnvHarvard:List of 2
+##   ..$ go  : Named num [1:200] NA 1 NA NA NA NA NA NA 1 NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 1 1 1 1 1 1 1 1 NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##  $ dat.cnvMskcc  :List of 2
+##   ..$ go  : Named num [1:200] NA 1 NA NA NA NA NA NA 1 NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 1 1 1 1 1 1 1 1 NA NA ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+</code></pre>
+
+<pre><code class="r">head(data.frame(fisher = gseUP.sep.3$dat.affy$kegg, wilcoxon = gseUP.sep$dat.affy$kegg))
+</code></pre>
+
+<pre><code>##                                                 fisher wilcoxon
+## 00140.Steroid hormone biosynthesis                   1   0.3180
+## 00340.Histidine metabolism                           1   0.8348
+## 00650.Butanoate metabolism                           1   0.1143
+## 05142.Chagas disease (American trypanosomiasis)      1   0.1971
+## 00640.Propanoate metabolism                          1   0.8698
+## 04115.p53 signaling pathway                          1   0.6250
+</code></pre>
+
+<h3>code chunk number 19: adjustP</h3>
+
+<pre><code class="r">gseABS.sep.BH &lt;- adjustPvalGSE(gseABS.sep)
+gseABS.sep.holm &lt;- adjustPvalGSE(gseABS.sep, proc = &quot;Holm&quot;)
+</code></pre>
+
+<h3>code chunk number 20: adjusted.format</h3>
+
+<pre><code class="r">names(gseABS.sep.BH)
+</code></pre>
+
+<pre><code>## [1] &quot;dat.affy&quot;       &quot;dat.agilent&quot;    &quot;dat.cnvHarvard&quot; &quot;dat.cnvMskcc&quot;
+</code></pre>
+
+<pre><code class="r">names(gseABS.sep.holm)
+</code></pre>
+
+<pre><code>## [1] &quot;dat.affy&quot;       &quot;dat.agilent&quot;    &quot;dat.cnvHarvard&quot; &quot;dat.cnvMskcc&quot;
+</code></pre>
+
+<pre><code class="r">str(gseABS.sep.BH$dat.affy)
+</code></pre>
+
+<pre><code>## List of 2
+##  $ go  : num [1:200, 1:2] NA 0.979 NA NA NA ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   .. ..$ : chr [1:2] &quot;rawp&quot; &quot;BH&quot;
+##  $ kegg: num [1:200, 1:2] 0.723 0.191 0.912 0.829 0.152 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##   .. ..$ : chr [1:2] &quot;rawp&quot; &quot;BH&quot;
+</code></pre>
+
+<pre><code class="r">str(gseABS.sep.holm$dat.affy)
+</code></pre>
+
+<pre><code>## List of 2
+##  $ go  : num [1:200, 1:2] NA 0.979 NA NA NA ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   .. ..$ : chr [1:2] &quot;rawp&quot; &quot;Holm&quot;
+##  $ kegg: num [1:200, 1:2] 0.723 0.191 0.912 0.829 0.152 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+##   .. ..$ : chr [1:2] &quot;rawp&quot; &quot;Holm&quot;
+</code></pre>
+
+<pre><code class="r">head(gseABS.sep.BH$dat.affy$go, n = 10)
+</code></pre>
+
+<pre><code>##                                                                                                     rawp
+## GO:0034970.histone H3-R2 methylation                                                                  NA
+## GO:2001236.regulation of extrinsic apoptotic signaling pathway                                    0.9791
+## GO:0021568.rhombomere 2 development                                                                   NA
+## GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage     NA
+## GO:0048102.autophagic cell death                                                                      NA
+## GO:0006043.glucosamine catabolic process                                                              NA
+## GO:0072272.proximal/distal pattern formation involved in metanephric nephron development              NA
+## GO:0006270.DNA replication initiation                                                                 NA
+## GO:0046130.purine ribonucleoside catabolic process                                                0.3239
+## GO:0051933.amino acid uptake involved in synaptic transmission                                        NA
+##                                                                                                   BH
+## GO:0034970.histone H3-R2 methylation                                                              NA
+## GO:2001236.regulation of extrinsic apoptotic signaling pathway                                     1
+## GO:0021568.rhombomere 2 development                                                               NA
+## GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage NA
+## GO:0048102.autophagic cell death                                                                  NA
+## GO:0006043.glucosamine catabolic process                                                          NA
+## GO:0072272.proximal/distal pattern formation involved in metanephric nephron development          NA
+## GO:0006270.DNA replication initiation                                                             NA
+## GO:0046130.purine ribonucleoside catabolic process                                                 1
+## GO:0051933.amino acid uptake involved in synaptic transmission                                    NA
+</code></pre>
+
+<pre><code class="r">head(gseABS.sep.holm$dat.affy$go, n = 10)
+</code></pre>
+
+<pre><code>##                                                                                                     rawp
+## GO:0034970.histone H3-R2 methylation                                                                  NA
+## GO:2001236.regulation of extrinsic apoptotic signaling pathway                                    0.9791
+## GO:0021568.rhombomere 2 development                                                                   NA
+## GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage     NA
+## GO:0048102.autophagic cell death                                                                      NA
+## GO:0006043.glucosamine catabolic process                                                              NA
+## GO:0072272.proximal/distal pattern formation involved in metanephric nephron development              NA
+## GO:0006270.DNA replication initiation                                                                 NA
+## GO:0046130.purine ribonucleoside catabolic process                                                0.3239
+## GO:0051933.amino acid uptake involved in synaptic transmission                                        NA
+##                                                                                                   Holm
+## GO:0034970.histone H3-R2 methylation                                                                NA
+## GO:2001236.regulation of extrinsic apoptotic signaling pathway                                       1
+## GO:0021568.rhombomere 2 development                                                                 NA
+## GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage   NA
+## GO:0048102.autophagic cell death                                                                    NA
+## GO:0006043.glucosamine catabolic process                                                            NA
+## GO:0072272.proximal/distal pattern formation involved in metanephric nephron development            NA
+## GO:0006270.DNA replication initiation                                                               NA
+## GO:0046130.purine ribonucleoside catabolic process                                                   1
+## GO:0051933.amino acid uptake involved in synaptic transmission                                      NA
+</code></pre>
+
+<h3>code chunk number 21: figure004</h3>
+
+<pre><code class="r">hist(gseABS.sep.BH$dat.affy$go[, &quot;rawp&quot;], nclass = 10, col = &quot;orange&quot;, main = &quot;P-values&quot;)
+</code></pre>
+
+<p><img src="data:image/png;base64,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t0o+kLw3WZzU8qVJPe5mSbU1LfCvyjF1/IeSjZJHD5a/kGm1vZPh9vrAUB8I3p08I9EIECBAgMBUCQwLfBXG0fw6yw8fkTg4818bSRX0ryd1zD2Thw7mP57paLtVFp6bfCa5PKn969Z7tTUt8IfnmDr+zcn+Sd2Krw8U9cGh2q7JlUntUx9YPp08MakPAxoBAgQIEJgqgWGBPzpnfYOkim99Xz67nZAVVTiHqX3qO/parqv0Tw3m75VptbpKr9vxtb0+LPxHcu5gub4nr9ZU4OuuwbDdOTN1/PAW/Y8GyydmWrfiR7Nplqvtk3w7GRb6On7064csagQIECBAYOELDAv8XEWwiu1eIxnelj8r685LViTHJ7W+2uOSKq6frIW0Wn9OUuvqFn610QJfy79PavvGtZC2X1LLwwL/hsHyAZlWqyvzByXLk2o7JXUnob5W2Hwwf0qm9Rh7JBoBAgQIEJgagbYFfhzIq7OhCmjlhSM73Xuwrn7YrW71HzRYrv12SarNLvDDK/SPZttzktOT2n9Y4O85WD4t07rtX18H1Pb6nr3a3ZL6Abu6wn9i8tSk7hrUVwN1d0IjQIAAAQJTIzDfAn/DSFVRrVvr289SOzjL9f14FeH6/v4zg/n64bhqswv832Rd3Q2o/c9OHjWYHxb4LM48PblwsP53mX4i2TgZtn/IzI+T6lM9zhlJfZWgESBAgAABAtegwCZ5rK3X4PHqVv71W+xf+9QP+o1rW2XDjkk9nkaAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBNajwOI814br8fk8FQECBAgQIHANCeyUx/lQcmnyjeQmybA9OjOfHC6YEiBAgAABAnMLbDD3Lutlj+fmWc5K9kiOSo5I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" alt="plot of chunk unnamed-chunk-15"/> </p>
+
+<h3>code chunk number 22: figure005</h3>
+
+<pre><code class="r">hist(gseABS.sep.BH$dat.affy$go[, &quot;BH&quot;], nclass = 10, col = &quot;orange&quot;, main = &quot;Q-values&quot;)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-16"/> </p>
+
+<h3>code chunk number 23: readAndProcessData</h3>
+
+<pre><code class="r">autismGenes &lt;- read.table(&quot;myData/101symbols_v02.txt&quot;, sep = &quot;\t&quot;, header = TRUE, 
+    colClasses = &quot;character&quot;)
+str(autismGenes)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    101 obs. of  1 variable:
+##  $ SYMBOL: chr  &quot;ANKRD11&quot; &quot;AP1S2&quot; &quot;ARX&quot; &quot;ATRX&quot; ...
+</code></pre>
+
+<h3>code chunk number 24: newFunctionForLists</h3>
+
+<pre><code class="r">formatGeneList &lt;- function(geneList, allGenes) {
+    stats &lt;- 1 * allGenes %in% geneList
+    names(stats) &lt;- allGenes
+    out &lt;- list(GeneList = stats)
+}
+</code></pre>
+
+<h3>code chunk number 25: formatTheGeneLsit</h3>
+
+<pre><code class="r">allGenes &lt;- unique(unlist(as.list(org.Hs.egSYMBOL)))
+str(allGenes)
+</code></pre>
+
+<pre><code>##  chr [1:46257] &quot;A1BG&quot; &quot;NAT2&quot; &quot;ADA&quot; &quot;CDH2&quot; &quot;AKT3&quot; &quot;GAGE12F&quot; ...
+</code></pre>
+
+<pre><code class="r">geneMembership &lt;- formatGeneList(autismGenes$SYMBOL, allGenes)
+str(geneMembership)
+</code></pre>
+
+<pre><code>## List of 1
+##  $ GeneList: Named num [1:46257] 0 0 0 0 0 0 0 0 0 0 ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:46257] &quot;A1BG&quot; &quot;NAT2&quot; &quot;ADA&quot; &quot;CDH2&quot; ...
+</code></pre>
+
+<pre><code class="r">table(geneMembership$GeneList)
+</code></pre>
+
+<pre><code>## 
+##     0     1 
+## 46156   101
+</code></pre>
+
+<h3>code chunk number 26: runBatchGSE.altFunc3</h3>
+
+<pre><code class="r">gseMyList &lt;- runBatchGSE(dataList = geneMembership, fgsList = fgsList, absolute = FALSE, 
+    gseFunc = gseFunc, threshold = 0.5)
+</code></pre>
+
+<h3>code chunk number 27: showTheResults</h3>
+
+<pre><code class="r">str(gseMyList)
+</code></pre>
+
+<pre><code>## List of 1
+##  $ GeneList:List of 2
+##   ..$ go  : Named num [1:200] 1 1 1 1 1 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;GO:0034970.histone H3-R2 methylation&quot; &quot;GO:2001236.regulation of extrinsic apoptotic signaling pathway&quot; &quot;GO:0021568.rhombomere 2 development&quot; &quot;GO:1902230.negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage&quot; ...
+##   ..$ kegg: Named num [1:200] 1 1 1 0.204 1 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+</code></pre>
+
+<pre><code class="r">str(gseMyList$GeneList$kegg)
+</code></pre>
+
+<pre><code>##  Named num [1:200] 1 1 1 0.204 1 ...
+##  - attr(*, &quot;names&quot;)= chr [1:200] &quot;00140.Steroid hormone biosynthesis&quot; &quot;00340.Histidine metabolism&quot; &quot;00650.Butanoate metabolism&quot; &quot;05142.Chagas disease (American trypanosomiasis)&quot; ...
+</code></pre>
+
+<pre><code class="r">summary(gseMyList$GeneList$kegg)
+</code></pre>
+
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   0.000   0.142   1.000   0.691   1.000   1.000
+</code></pre>
+
+<pre><code class="r">table(is.na(gseMyList$GeneList$kegg))
+</code></pre>
+
+<pre><code>## 
+## FALSE 
+##   200
+</code></pre>
+
+<pre><code class="r">table(gseMyList$GeneList$kegg &lt; 0.01)
+</code></pre>
+
+<pre><code>## 
+## FALSE  TRUE 
+##   182    18
+</code></pre>
+
+<pre><code class="r">table(gseMyList$GeneList$go &lt; 0.01)
+</code></pre>
+
+<pre><code>## 
+## FALSE  TRUE 
+##   176    24
+</code></pre>
+
+<h3>code chunk number 28: adjustP.2</h3>
+
+<pre><code class="r">gseMyList.BH &lt;- adjustPvalGSE(gseMyList)
+gseMyList.BH$GeneList$go[gseMyList.BH$GeneList$go[, &quot;BH&quot;] &lt; 0.01, ]
+</code></pre>
+
+<pre><code>##                                                                rawp
+## GO:0046130.purine ribonucleoside catabolic process        3.529e-04
+## GO:2000648.positive regulation of stem cell proliferation 2.713e-04
+## GO:0007420.brain development                              2.179e-23
+## GO:0021542.dentate gyrus development                      4.865e-04
+## GO:0021604.cranial nerve structural organization          9.842e-05
+## GO:0006950.response to stress                             1.172e-08
+## GO:0016331.morphogenesis of embryonic epithelium          2.759e-04
+## GO:0070271.protein complex biogenesis                     6.436e-04
+## GO:0050803.regulation of synapse structure and activity   4.068e-11
+## GO:0042692.muscle cell differentiation                    1.134e-04
+## GO:0022607.cellular component assembly                    1.578e-12
+## GO:0048703.embryonic viscerocranium morphogenesis         2.100e-04
+## GO:0048701.embryonic cranial skeleton morphogenesis       8.062e-05
+## GO:0048519.negative regulation of biological process      3.953e-14
+## GO:0006195.purine nucleotide catabolic process            8.977e-05
+## GO:1990138.neuron projection extension                    5.184e-04
+##                                                                  BH
+## GO:0046130.purine ribonucleoside catabolic process        5.429e-03
+## GO:2000648.positive regulation of stem cell proliferation 4.598e-03
+## GO:0007420.brain development                              4.358e-21
+## GO:0021542.dentate gyrus development                      6.912e-03
+## GO:0021604.cranial nerve structural organization          2.461e-03
+## GO:0006950.response to stress                             4.688e-07
+## GO:0016331.morphogenesis of embryonic epithelium          4.598e-03
+## GO:0070271.protein complex biogenesis                     8.045e-03
+## GO:0050803.regulation of synapse structure and activity   2.034e-09
+## GO:0042692.muscle cell differentiation                    2.519e-03
+## GO:0022607.cellular component assembly                    1.052e-10
+## GO:0048703.embryonic viscerocranium morphogenesis         4.200e-03
+## GO:0048701.embryonic cranial skeleton morphogenesis       2.461e-03
+## GO:0048519.negative regulation of biological process      3.953e-12
+## GO:0006195.purine nucleotide catabolic process            2.461e-03
+## GO:1990138.neuron projection extension                    6.912e-03
+</code></pre>
+
+<pre><code class="r">gseMyList.BH$GeneList$kegg[gseMyList.BH$GeneList$kegg[, &quot;BH&quot;] &lt; 0.01, ]
+</code></pre>
+
+<pre><code>##                                           rawp        BH
+## 04514.Cell adhesion molecules (CAMs) 5.109e-07 0.0001022
+## 04510.Focal adhesion                 8.130e-05 0.0054202
+## 05211.Renal cell carcinoma           1.757e-05 0.0017571
+</code></pre>
+
+<h3>code chunk number 29: sessioInfo</h3>
+
+<pre><code class="r">sessionInfo()
+</code></pre>
+
+<pre><code>## R version 3.0.3 (2014-03-06)
+## Platform: x86_64-apple-darwin13.1.0 (64-bit)
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] parallel  stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
+## 
+## other attached packages:
+##  [1] GO.db_2.10.1         KEGG.db_2.10.1       multtest_2.18.0     
+##  [4] annotate_1.40.1      org.Hs.eg.db_2.10.1  RSQLite_0.11.4      
+##  [7] DBI_0.2-7            AnnotationDbi_1.24.0 RTopper_1.8.0       
+## [10] limma_3.18.13        Biobase_2.22.0       BiocGenerics_0.8.0  
+## [13] BiocInstaller_1.12.1 knitr_1.5           
+## 
+## loaded via a namespace (and not attached):
+##  [1] evaluate_0.5.5  formatR_0.10    IRanges_1.20.7  MASS_7.3-33    
+##  [5] splines_3.0.3   stats4_3.0.3    stringr_0.6.2   survival_2.37-7
+##  [9] tools_3.0.3     XML_3.98-1.1    xtable_1.7-3
+</code></pre>
+
+</body>
+
+</html>
+

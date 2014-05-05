@@ -1,4 +1,4 @@
-__Author: Luigi Marchionni, May 6th 2014__
+__Author: Nitesh Turaga, May 6th 2014__
 
 Goal: from Affymetrix raw data stored in CEL files to differential gene expression
 ========================================================
@@ -124,7 +124,7 @@ geneSetTest(tG2$ID%in%kegg[[1]],tG2$t,alternative="up")
 ### Visual representation
 
 ```{r barCodePlot}
-barcodeplot(tG2$ID%in%kegg[[1]],tG2$t)
+barcodeplot(tG2$t,tG2$ID%in%kegg[[1]])
 ```
 
 ### The test on all KEGG  FGS (after removing NA)
@@ -172,19 +172,19 @@ str(gse)
 ### This is the way we can visualize this: the first gene set
 ```{r firstGeneSet}
 i=10
-barcodeplot(tG2$ID%in%kegg[[i]],tG2$t)
+barcodeplot(tG2$t,tG2$ID%in%kegg[[i]])
 ```
 
 ### This is the way we can visualize this: the smallest pvalue
 ```{r visualizeSmallestPValue}
 i=which.min(gse)
-barcodeplot(tG2$ID%in%kegg[[i]],tG2$t)
+barcodeplot(tG2$t,tG2$ID%in%kegg[[i]])
 ```
 
 ### This is the way we can visualize this: the larest pvalue
 ```{r visualizeLargestPValue}
 i=which.max(gse)
-barcodeplot(tG2$ID%in%kegg[[i]],tG2$t)
+barcodeplot(tG2$t,tG2$ID%in%kegg[[i]])
 ```
 
 
@@ -235,7 +235,8 @@ newDmat <- data.frame(
 
 ### Run the test on one FGS: the contrast is the column index from the design matrix
 ```{r}
-roast(iset= sel, y=mat, design=newDmat, contrast=2)
+# roast(iset= sel, y=mat, design=newDmat, contrast=2)
+roast( y=mat, design=newDmat, contrast=2)
 ```
 
 ### The test on the first five FGS for KEGG
@@ -243,7 +244,10 @@ roast(iset= sel, y=mat, design=newDmat, contrast=2)
 gse2 <- list()
 for (i in 1:5){
 	sel <- rownames(mat)%in%kegg[[i]]
-	gse2[[i]] <- roast(sel, mat, design=newDmat, contrast=2)
+#   mat = mat[all(sel)]
+#   table(sel)
+#   gse2[[i]] <- roast(sel, mat, design=newDmat, contrast=2)
+gse2[[i]] <- roast(mat, design=newDmat, contrast=2)
 	names(gse2)[i] <- names(kegg)[i]
 }
 ```
@@ -253,7 +257,8 @@ for (i in 1:5){
 gse.go <- list()
 for (i in 1:5){
 	sel <- rownames(mat)%in%go[[i]]
-	gse.go[[i]] <- roast(sel, mat, design=newDmat, contrast=2)
+# 	gse.go[[i]] <- roast(sel, mat, design=newDmat, contrast=2)
+  gse.go[[i]] <- roast(mat, design=newDmat, contrast=2)
 	names(gse.go)[i] <- names(go)[i]
 }
 ```
@@ -270,8 +275,21 @@ library(GO.db)
 ### If you do not have it install it from bioconductor
 
 ```{r}
+installedPckgs <- installed.packages()[,"Package"]
+
+# Here we define the list of desired libraries
+pckgListBIOC <- c("KEGG.db")
+
+# We source the biocLite.R script from the Bioconductor website
 source("http://bioconductor.org/biocLite.R")
-biocLite("KEGG.db")
+
+# Load the packages, or install them from Bioconductor if needed
+for (pckg in pckgListBIOC) {
+    if (! pckg %in% installedPckgs) biocLite(pckg)
+    require(pckg, character.only=TRUE)
+}
+
+require("KEGG.db")
 ```
 
 ### Check the content of the KEGG metadata package
@@ -290,7 +308,7 @@ goNames <- lapply(goNames,Term)
 ```
 
 Print pathNames and goNames
-```{r}
+```{r,eval=FALSE}
 print(pathNames)
 
 print(goNames)

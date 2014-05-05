@@ -1,10 +1,8 @@
 __Author: Nitesh Turaga, May 6th 2014__
 
-__Original Code: Luigi Marchionni__
 
 Goal: from Affymetrix raw data stored in CEL files to differential gene expression
 ========================================================
-
 
 
 
@@ -18,7 +16,7 @@ getwd()
 ```
 
 ```
-## [1] "/Users/niteshturaga/Documents/GeneExpressionDataAnalysis/affyData"
+[1] "/Users/niteshturaga/Documents/GeneExpressionDataAnalysis/affyData"
 ```
 
 
@@ -37,7 +35,7 @@ date()
 ```
 
 ```
-## [1] "Mon May  5 15:46:59 2014"
+[1] "Mon May  5 16:27:37 2014"
 ```
 
 
@@ -59,7 +57,6 @@ We are going to use the following packages from bioconductor:
 ### To install the missing packages from Bioconductor use biocLite()
 
 First you need to get the list of available packages
-
 
 ```
 ## Bioconductor version 2.13 (BiocInstaller 1.12.1), ?biocLite for help
@@ -115,7 +112,8 @@ First you need to get the list of available packages
 ```
 
 
-### Clear the workspace, note the two "embedded" functions
+Clear the workspace, note the two "embedded" functions
+
 
 ```r
 rm(list = ls())
@@ -135,7 +133,6 @@ require(annotate)
 
 Reading and preprocessing the expression data
 ------------------------------------------------
-
 
 Load data from CEL files using the ReadAffy function
 
@@ -210,7 +207,7 @@ str(dat)
 ##   .. ..- attr(*, "names")= chr "Rows"
 ##   ..@ ncol             : Named int 640
 ##   .. ..- attr(*, "names")= chr "Cols"
-##   ..@ assayData        :<environment: 0x7fbfdfe13310> 
+##   ..@ assayData        :<environment: 0x7fa9814adc78> 
 ##   ..@ phenoData        :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
 ##   .. .. ..@ varMetadata      :'data.frame':	1 obs. of  1 variable:
 ##   .. .. .. ..$ labelDescription: chr "arbitrary numbering"
@@ -267,9 +264,9 @@ str(dat)
 ```
 
 
-Information about the platform
 
 ```r
+# Information about the platform
 annotation(dat)
 ```
 
@@ -278,16 +275,16 @@ annotation(dat)
 ```
 
 
-Information about the features
 
 ```r
+# Information about the features
 head(featureData(dat))
 ```
 
 
-Information about the samples, also called the phenotype data.
 
 ```r
+# Information about the samples, also called the phenotype data.
 pData(dat)
 ```
 
@@ -314,7 +311,6 @@ Read the phenotype data associated with the experiment. __Note the use of colCla
 colClasses, is setting each column to be read in with a specific data type. 
 
 ```r
-
 pheno <- read.table("./data/targets.txt", sep = "\t", header = T, colClasses = c("character", 
     "character", "factor", "factor", "character"))
 ```
@@ -328,46 +324,44 @@ str(pheno)
 ```
 
 ```
-## 'data.frame':	13 obs. of  5 variables:
-##  $ Name      : chr  "GSM133995.CEL.gz" "GSM134000.CEL.gz" "GSM134015.CEL.gz" "GSM134050.CEL.gz" ...
-##  $ CellLine  : chr  "MCF7" "MDA-MB-231" "T-47D" "COLO205" ...
-##  $ CancerType: Factor w/ 4 levels "breast","Burkitt",..: 1 1 1 3 3 3 2 2 2 4 ...
-##  $ CellType  : Factor w/ 2 levels "Epithelial","Lymphocytes": 1 1 1 1 1 1 2 2 2 2 ...
-##  $ Comment   : chr  "Breast cancer cell line" "Breast cancer cell line" "Breast cancer cell line" "Colon cancer cell line" ...
+'data.frame':	13 obs. of  5 variables:
+ $ Name      : chr  "GSM133995.CEL.gz" "GSM134000.CEL.gz" "GSM134015.CEL.gz" "GSM134050.CEL.gz" ...
+ $ CellLine  : chr  "MCF7" "MDA-MB-231" "T-47D" "COLO205" ...
+ $ CancerType: Factor w/ 4 levels "breast","Burkitt",..: 1 1 1 3 3 3 2 2 2 4 ...
+ $ CellType  : Factor w/ 2 levels "Epithelial","Lymphocytes": 1 1 1 1 1 1 2 2 2 2 ...
+ $ Comment   : chr  "Breast cancer cell line" "Breast cancer cell line" "Breast cancer cell line" "Colon cancer cell line" ...
 ```
 
 ```r
-
 # Let's get summarize the data
 summary(pheno)
 ```
 
 ```
-##      Name             CellLine           CancerType        CellType
-##  Length:13          Length:13          breast :3    Epithelial :6  
-##  Class :character   Class :character   Burkitt:3    Lymphocytes:7  
-##  Mode  :character   Mode  :character   colon  :3                   
-##                                        DLBCL  :4                   
-##    Comment         
-##  Length:13         
-##  Class :character  
-##  Mode  :character  
-## 
+     Name             CellLine           CancerType        CellType
+ Length:13          Length:13          breast :3    Epithelial :6  
+ Class :character   Class :character   Burkitt:3    Lymphocytes:7  
+ Mode  :character   Mode  :character   colon  :3                   
+                                       DLBCL  :4                   
+   Comment         
+ Length:13         
+ Class :character  
+ Mode  :character  
+                   
 ```
 
 ```r
-
 # Factor are very useful!
 table(pheno$CancerType, pheno$CellType)
 ```
 
 ```
-##          
-##           Epithelial Lymphocytes
-##   breast           3           0
-##   Burkitt          0           3
-##   colon            3           0
-##   DLBCL            0           4
+         
+          Epithelial Lymphocytes
+  breast           3           0
+  Burkitt          0           3
+  colon            3           0
+  DLBCL            0           4
 ```
 
 ```r
@@ -443,9 +437,9 @@ dat.rma <- rma(dat)
 ```
 
 ```
-## Background correcting
-## Normalizing
-## Calculating Expression
+Background correcting
+Normalizing
+Calculating Expression
 ```
 
 ```r
@@ -455,9 +449,9 @@ class(dat.rma)
 ```
 
 ```
-## [1] "ExpressionSet"
-## attr(,"package")
-## [1] "Biobase"
+[1] "ExpressionSet"
+attr(,"package")
+[1] "Biobase"
 ```
 
 
@@ -486,12 +480,12 @@ Differential Gene Expression Analysis
 Design Matrix
 -------------
 
-To create the design matrix  to fit the linear model we start combining all levels of our factors of interest
+To create the design matrix and to fit the linear model we start combining all levels of our factors of interest.
 
 ```r
 groups <- factor(paste(pheno$CancerType, pheno$CellType, sep = "."))
 
-### Count the number of sample per group
+# Count the number of sample per group
 table(groups)
 ```
 
@@ -505,11 +499,11 @@ table(groups)
 
 ```r
 
-### Create the design matrix
+# Create the design matrix
 dMat <- model.matrix(~0 + groups)
 colnames(dMat) <- levels(groups)
 
-### This is the design matrix
+# This is the design matrix
 dMat
 ```
 
@@ -551,8 +545,8 @@ dMat
 
 ```r
 
-### In reality we could just use the informations in the pheno$CancerType
-### factor, which is equivalent
+# In reality we could just use the informations in the pheno$CancerType
+# factor, which is equivalent
 table(pheno$CancerType)
 ```
 
@@ -566,7 +560,7 @@ table(pheno$CancerType)
 dMat2 <- model.matrix(~0 + pheno$CancerType)
 colnames(dMat2) <- levels(pheno$CancerType)
 
-### This is the second design matrix
+# This is the second design matrix
 dMat2
 ```
 
@@ -594,7 +588,7 @@ dMat2
 
 ```r
 
-### As you can see they are exactly the same
+# As you can see they are exactly the same
 dMat == dMat2
 ```
 
@@ -642,8 +636,9 @@ cMat <- makeContrasts(levels = colnames(dMat), CellType = (((colon.Epithelial +
     breast.Epithelial)/2) - ((Burkitt.Lymphocytes + DLBCL.Lymphocytes)/2)), 
     CancerType.Epithelial = (colon.Epithelial - breast.Epithelial), CancerType.Lyphocytes = (Burkitt.Lymphocytes - 
         DLBCL.Lymphocytes))
-### All coefficients that were combine contribute equally: the columns sum
-### must be equal to 0
+
+# All coefficients that were combined contribute equally. The columns sum
+# must be equal to 0.
 cMat
 ```
 
@@ -668,13 +663,13 @@ apply(cMat, 2, sum)
 ```r
 
 
-### A contrast matrix using the second design matrix
+# A contrast matrix using the second design matrix
 cMat2 <- makeContrasts(levels = colnames(dMat2), CellType = (((colon + breast)/2) - 
     ((Burkitt + DLBCL)/2)), CancerType.Epithelial = (colon - breast), CancerType.Lyphocytes = (Burkitt - 
     DLBCL))
 
-### Also in this case all the coefficients that were combine must contribute
-### equally: the columns sum again must be equal to 0
+# Also in this case all the coefficients that were combined must contribute
+# equally. The columns sum again must be equal to 0.
 cMat2
 ```
 
@@ -698,7 +693,7 @@ apply(cMat2, 2, sum)
 
 ```r
 
-### The two contrasts matrices are the same
+# The two contrasts matrices are the same
 cMat == cMat2
 ```
 
@@ -714,7 +709,7 @@ cMat == cMat2
 
 
 Fit the model using the first design and contrast matrices
---------
+-----------------------------------------------------------
 
 You might want to learn about __lmFit()__ and __contrasts.fit()__ 
 
@@ -722,13 +717,9 @@ You might want to learn about __lmFit()__ and __contrasts.fit()__
 fit.ls <- lmFit(dat.rma, dMat, method = "ls")
 fit.ls <- contrasts.fit(fit.ls, cMat)
 
-
-
 # Fit the model using the second design matrix and contrast matrices
 fit2.ls <- lmFit(dat.rma, dMat2, method = "ls")
 fit2.ls <- contrasts.fit(fit2.ls, cMat2)
-
-
 
 # Moderation of standard errors using empirical Bayes for first model fit
 eb.ls <- eBayes(fit.ls, proportion = 0.01)
@@ -899,7 +890,7 @@ eb2.ls <- eBayes(fit2.ls, proportion = 0.01)
 ```
 
 
-__Save the model__
+**Save the model**
 
 With the following you can write the complete linear model analysis results to a file in a tabular format
 
@@ -1018,7 +1009,8 @@ str(tG2)
 Retrieve and add the annotation
 -------------------------
 
-### Retrieve and add gene SYMBOLS, ENTREZID, and GENENAME
+Retrieve and add gene SYMBOLS, ENTREZID, and GENENAME
+
 Using the "old" hard-way method based on mget():
 
 ```r
@@ -1033,7 +1025,7 @@ nm <- mget(tG2$ID, hgu95aGENENAME, ifnotfound = NA)
 ```
 
 
-### Add the annnotation to differential gene expression results
+Add the annnotation to differential gene expression results
 
 ```r
 tG2ann <- cbind(EGID = unlist(egid), SYMBOL = unlist(sym), GeneName = unlist(nm), 
@@ -1041,7 +1033,7 @@ tG2ann <- cbind(EGID = unlist(egid), SYMBOL = unlist(sym), GeneName = unlist(nm)
 ```
 
 
-### Let's check the results now
+Let's check the results now
 
 Print and see what the what the data frame looks like after adding the annotation.
 
@@ -1068,8 +1060,9 @@ ann <- select(x = hgu95a.db, keys = tG2$ID, columns = c("ENTREZID", "SYMBOL",
 ```
 
 ```r
-# ann <- select(x=hgu95a.db, keys=rownames(tG2),cols=c('ENTREZID', 'SYMBOL',
-# 'GENENAME'))
+
+### Alternative ### ann <- select(x=hgu95a.db,
+### keys=rownames(tG2),cols=c('ENTREZID', 'SYMBOL', 'GENENAME'))
 
 ### Check the dimensions of the annotation the results data.frames
 dim(ann)
@@ -1115,7 +1108,7 @@ str(tG2ann2)
 ```
 
 
-### We can save the results as usual for later use
+We can save the results as usual for later use
 
 ```r
 save(tG2, fit2.ls, eb2.ls, dMat2, cMat2, file = "./objs/linearModel.rda")
@@ -1123,8 +1116,7 @@ save(tG2, fit2.ls, eb2.ls, dMat2, cMat2, file = "./objs/linearModel.rda")
 
 
 
-### We can also filter the genes and create a report page
-
+We can also filter the genes and create a report page
 
 ```r
 # tmp <- tG2[ tG2$B > 10 , ]
@@ -1150,7 +1142,7 @@ A few useful plots
 --------------------
 
 
-### We can make a volcano plot
+We can make a **volcano plot**
 
 
 ```r
@@ -1160,7 +1152,7 @@ volcanoplot(eb2.ls)
 ![plot of chunk volcanoPlot](figure/volcanoPlot.png) 
 
 
-### We can Retrieve the original gene expression for the interesting genes
+We can Retrieve the original gene expression for the interesting genes
 
 All the expression values
 
@@ -1170,22 +1162,22 @@ dim(mat)
 ```
 
 ```
-## [1] 12626    13
+[1] 12626    13
 ```
 
 ```r
 
-### Filter to the interesting ones (differentially expressed genes)
+# Filter to the interesting ones (differentially expressed genes)
 mat <- mat[rownames(mat) %in% tmp$PROBEID, ]
 dim(mat)
 ```
 
 ```
-## [1] 259  13
+[1] 259  13
 ```
 
 
-### Generate a heatmap()
+Generate a **heatmap()**
 
 ```r
 heatmap(mat, scale = "none", na.rm = TRUE, margins = c(15, 7), distfun = function(x) {
@@ -1200,13 +1192,13 @@ heatmap(mat, scale = "none", na.rm = TRUE, margins = c(15, 7), distfun = functio
 ```r
 
 
-### Add symbol as rownames using mget()
+# Add symbol as rownames using mget()
 colnames(mat) <- pheno$CellLine
 mySym <- mget(rownames(mat), hgu95aSYMBOL, ifnotfound = NA)
 rownames(mat) <- unlist(mySym)
 
 
-### Generated the annotated heatmap with heatmap()
+# Generated the annotated heatmap with heatmap()
 heatmap(mat, scale = "row", na.rm = TRUE, margins = c(15, 7), distfun = function(x) {
     dist(x, method = "euclidian")
 }, hclustfun = function(x) {
@@ -1228,27 +1220,27 @@ sessionInfo()
 ```
 
 ```
-## R version 3.0.3 (2014-03-06)
-## Platform: x86_64-apple-darwin13.1.0 (64-bit)
-## 
-## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-## 
-## attached base packages:
-## [1] parallel  stats     graphics  grDevices utils     datasets  methods  
-## [8] base     
-## 
-## other attached packages:
-##  [1] hgu95acdf_2.13.0     annotate_1.40.1      hgu95a.db_2.10.1    
-##  [4] org.Hs.eg.db_2.10.1  RSQLite_0.11.4       DBI_0.2-7           
-##  [7] AnnotationDbi_1.24.0 limma_3.18.13        affy_1.40.0         
-## [10] Biobase_2.22.0       BiocGenerics_0.8.0   BiocInstaller_1.12.1
-## [13] knitr_1.5           
-## 
-## loaded via a namespace (and not attached):
-##  [1] affyio_1.30.0         digest_0.6.4          evaluate_0.5.5       
-##  [4] formatR_0.10          IRanges_1.20.7        preprocessCore_1.24.0
-##  [7] stats4_3.0.3          stringr_0.6.2         tools_3.0.3          
-## [10] XML_3.98-1.1          xtable_1.7-3          zlibbioc_1.8.0
+R version 3.0.3 (2014-03-06)
+Platform: x86_64-apple-darwin13.1.0 (64-bit)
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] hgu95acdf_2.13.0     annotate_1.40.1      hgu95a.db_2.10.1    
+ [4] org.Hs.eg.db_2.10.1  RSQLite_0.11.4       DBI_0.2-7           
+ [7] AnnotationDbi_1.24.0 limma_3.18.13        affy_1.40.0         
+[10] Biobase_2.22.0       BiocGenerics_0.8.0   BiocInstaller_1.12.1
+[13] knitr_1.5           
+
+loaded via a namespace (and not attached):
+ [1] affyio_1.30.0         digest_0.6.4          evaluate_0.5.5       
+ [4] formatR_0.10          IRanges_1.20.7        preprocessCore_1.24.0
+ [7] stats4_3.0.3          stringr_0.6.2         tools_3.0.3          
+[10] XML_3.98-1.1          xtable_1.7-3          zlibbioc_1.8.0       
 ```
 

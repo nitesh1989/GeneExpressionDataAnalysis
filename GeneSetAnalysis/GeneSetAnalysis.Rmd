@@ -1,9 +1,8 @@
-__Author: Luigi Marchionni, May 6th 2014__
+__Author: Nitesh Turaga, May 6th 2014__
 
 
 Goal: Gene Set Analysis
 ========================================================
-
 
 ### Some Basics
 
@@ -55,7 +54,9 @@ The following R packages were used to perform our analyses
 10. **AnnotationDBI** and **annotate**: these libraries contain classes and methods to access and manipulated annotation packages and can be obtained from Bioconductor.
 
 
+
 Source the biocLite.R script from Bioconductor
+
 ```{r installBiocPackages}
 source("http://bioconductor.org/biocLite.R")
 ###Get the list of available packages

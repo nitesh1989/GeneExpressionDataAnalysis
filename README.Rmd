@@ -1,11 +1,12 @@
 Gene Expression Analysis
 ========================================================
 
-Nitesh Turaga
+Nitesh Turaga, Johns Hopkins University, Email: nturaga1@jhmi.edu 
 
-Johns Hopkins University
 
-Email: nturaga1@jhmi.edu 
+Original Code by: **Luigi Marchionni, MD, PhD**, Johns Hopkins University
+
+
 
 Class Content:
 -------------------
