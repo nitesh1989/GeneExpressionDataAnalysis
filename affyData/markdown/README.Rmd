@@ -11,11 +11,9 @@ Rstudio and Markdown
 
 2. To extract the R code from the **.Rmd** files, you can use the command 
 
-
-```r
+```{r,echo =TRUE,eval=FALSE}
 library(knitr)
 knitr::purl("filename.Rmd")
 ```
-
 
 ### The _.md_ files are used as teaching material to present the code and the analysis which was run on my computer. It is just a way to show the results without having to run them again.
