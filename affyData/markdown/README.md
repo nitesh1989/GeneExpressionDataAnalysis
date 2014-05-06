@@ -1,0 +1,21 @@
+Author: Nitesh Turaga
+How to navigate the Markdown folder
+========================================================
+
+It is important to understand how to navigate through the markdown folder, as we used **knitr** to make the markdown files for the class.
+
+Rstudio and Markdown
+---------------------
+
+1. Open the **.Rmd** files in RStudio and you have the option to **Knit HTML**. This will produce HTML documents of the code.
+
+2. To extract the R code from the **.Rmd** files, you can use the command 
+
+
+```r
+library(knitr)
+knitr::purl("filename.Rmd")
+```
+
+
+### The _.md_ files are used as teaching material to present the code and the analysis which was run on my computer. It is just a way to show the results without having to run them again.
