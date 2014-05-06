@@ -9,28 +9,28 @@ Goal: from Affymetrix raw data stored in CEL files to differential gene expressi
 
 Getting  the working directory, in my case
 
-```{r getwd}
+```{r getwd,comment=NA}
 getwd()
 ```
 
 Setting the working directory, in my case:
-```{r setwd,eval=TRUE}
+```{r setwd,eval=TRUE,comment=NA}
 setwd("~/Documents/GeneExpressionDataAnalysis/affyData/")
 ````
 
 Check the date
 
-```{r checkDate}
+```{r checkDate,comment=NA}
 date()
 ```
 
 Clear the workspace, note the two "embedded" functions
-```{r clearWorkSpace}
+```{r clearWorkSpace,comment=NA}
 rm(list=ls())
 ```
 
 Load the libraries needed for the analysis, note the use of "require"
-```{r loadLibraries}
+```{r loadLibraries,comment=NA}
 require(affy)
 require(hgu95a.db)
 ```
@@ -39,7 +39,7 @@ require(hgu95a.db)
 
 ### Load data previously saved, and check their classes
 
-```{r loadPreviousData}
+```{r loadPreviousData,comment=NA}
 load("./objs/affyData.rda")
 ```
 
@@ -50,7 +50,7 @@ ls()
 ```
 
 Check classes
-```{r checkClasses}
+```{r checkClasses,comment=NA}
 class(dat)
 
 ### Note: dat.rma is an ExpresssionSet, which is a 
@@ -62,36 +62,36 @@ Access to data in the class
 
 Slots/elements contained in the two classes can be seen using:
 __NOTE: SLOT NAMES USUALLY WORK AS ACCESSORS__
-```{r slotNames}
+```{r slotNames,comment=NA}
 slotNames(dat)
 slotNames(dat.rma)
 ```
 
 The **exprs** extracts normalized and summarized gene expression
-```{r expressionMatrix}
+```{r expressionMatrix,comment=NA}
 dat.expr <- exprs(dat.rma)
 dim(dat.expr)
 ```
 
 The **pData** function extracts the phenotypic information
-```{r}
+```{r pData, comment=NA}
 pData(dat.rma)
 ```
 The **annotation** function extracts features information
-```{r}
+```{r annotation,comment=NA}
 annotation(dat.rma)
 ```
 
 The **pm** function extracts perfect match probe intensities.
 _Perfect match probes are intended to match perfectly the target sequence_.
-```{r}
+```{r pm,comment=NA}
 dat.pm <- pm(dat)
 dim(dat.pm)
 ```
 
 The **mm** extract mismatch probe intensities
 _Mismatch probes having one base mismatch with the target sequence intended to account for non-specific binding_
-```{r}
+```{r mm,comment=NA}
 dat.mm <- mm(dat)
 dim(dat.mm)
 ```
@@ -100,13 +100,14 @@ MA Plot
 ---------
 
 $M = log_{2}(R/G) = log_{2}(R) - log_{2}(G)$
+
 $A = \frac{1}{2}log_{2}(R*G) = \frac{1}{2}(log_{2}(R) + log_{2}(G))$
 
 ### We can now make an MA-plot
 
 We first define a function to divide the plotting area in rows and columns, 
 if you are unfamiliar with how to set the plotting area, you can use the **?par**.
-```{r makePlotArea}
+```{r makePlotArea,comment=NA}
 mypar <- function (nRow = 1, nCol = 1, ptsExp = 1) {
   par(mar = c(2, 2, 2, 1))
 	par(oma = c(2, 1, 1, 1))
@@ -116,24 +117,21 @@ mypar <- function (nRow = 1, nCol = 1, ptsExp = 1) {
 ```
 
 
-###################################################
-### We can compute rows and columns number based on the nuber of samples
-### You can do this also manually....
-```{r CHECK_THIS_computeRowsCols}
+We can compute rows and columns number based on the nuber of samples.
+You can do this also manually:
+```{r computeRowsCols,comment=NA}
 nc <- ceiling(sqrt(ncol(dat.rma)))
 nr <- ceiling(ncol(dat.rma)/nc)
 ```
-###################################################
 
-
-### We can make a plot for the raw data, before normalization
-```{r MAplot,fig.width=15,fig.height=15}
+We can make a plot for the raw data, before normalization
+```{r MAplot,fig.width=15,fig.height=15,comment=NA}
 mypar(nr,nc,0.5)
 MAplot(dat[,],pairs=F,plot.method="smoothScatter")
 ```
 
 We can save the plot to a file,
-```{r saveMAPlot}
+```{r saveMAPlot,comment=NA}
 bitmap(file="./figs/MApl.raw.png",width=20, height=10, res = 400)
 mypar(nr,nc,0.5)
 par(oma=c(2,1,1,1))
@@ -143,7 +141,7 @@ dev.off()
 
 
 ### MA-plot after normalization
-```{r MAplotAFterNormalization,fig.width=15,fig.height=15}
+```{r MAplotAFterNormalization,fig.width=15,fig.height=15,comment=NA}
 mypar(nr,nc,0.5)
 par(oma=c(2,1,1,1))
 a <- exprs(dat.rma)
@@ -161,7 +159,7 @@ for (i in 1:ncol(a)){
 
 
 MA-plot after normalization: saved to a file
-```{r saveMAPlotAfterNormalization}
+```{r saveMAPlotAfterNormalization,comment=NA}
 bitmap(file='./figs/MApl.rma.png',width=20,height=10,res=400)
 mypar(nr,nc,0.5)
 par(oma=c(2,1,1,1))
@@ -182,7 +180,7 @@ dev.off()
 
 ### Diagnostic Plots: 2D-Image
 
-```{r bitMap,fig.width = 10,fig.height=10}
+```{r bitMap,fig.width = 10,fig.height=10,comment=NA}
 bitmap(file="./figs/ima2D.png",width=2*nr, height=2*nc, res = 144)
 mypar(nr,nc,1) ; par(mar=c(1,1,1,1))
 image(dat[,])
@@ -191,7 +189,7 @@ dev.off()
 
 
 ### Log2 intensities boxplots: before and after normalization
-```{r boxPlots}
+```{r boxPlots,comment=NA}
 bitmap(file="./figs/exprBoxplot.png",width=15, height=15, res = 144)
 mypar(2,1,0.75)
 par(mar=c(10,1,1,1))
@@ -208,14 +206,16 @@ dev.off()
 ```
 
 
-### Compute RNA degradation
-```{r RNAdegradation}
+### RNA Degradation
+
+Compute RNA degradation
+```{r RNAdegradation,comment=NA}
 deg <- AffyRNAdeg(dat)
 ```
 
 
-### Make RNA degradation plot
-```{r makeRNADegradationPlot}
+Make RNA degradation plot
+```{r makeRNADegradationPlot,comment=NA}
 bitmap(file="./figs/degRNA.png",width=5, height=5, res = 1000)
 mypar(2,2,0.75)
 plotAffyRNAdeg(deg,cols=c(1:ncol(dat.rma)))
@@ -225,8 +225,8 @@ boxplot(deg$slope,main="Slope")
 dev.off()
 ```
 
-### Find the scan date
-```{r dateOfScan}
+Find the scan date
+```{r dateOfScan,comment=NA}
 dateOfScan <- protocolData(dat.rma)@data$ScanDate
 #Don't need the time, so we will remove that using regular expressions
 dateOfScan <- gsub(" .+", "", dateOfScan)
@@ -234,6 +234,6 @@ boxplot(log2(exprs(dat)), col=1+as.numeric(dateOfScan))
 ```
 
 ### Session information
-```{r sessionInformation}
+```{r sessionInformation,comment=NA}
 sessionInfo()
 ```

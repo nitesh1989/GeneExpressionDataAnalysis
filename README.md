@@ -16,11 +16,12 @@ Class Content:
 **Class Date:  May 6th**
 
 1. Affymetrix Gene expression data analysis
-2. Gene Set Analysis
+
    
 **Class Date: May 9th**
 
-1. RNAseq Analysis
+1. Gene Set Analysis
+2. RNAseq Analysis 
 
 
 

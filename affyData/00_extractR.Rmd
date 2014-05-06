@@ -13,10 +13,11 @@ library(knitr)
 knitr::purl("01_raw2dge.Rmd")
 ```
 
-Useful resources for the class
+Useful resources for the class and life after
 -------------------------------
 
 1. The affy vignette is a very good source, and is highly recommended. You can get this by installing and then just running **vignette("affy")** .
-2. The very comprehensive tutorial section by UC-Riverside [http://manuals.bioinformatics.ucr.edu/](http://manuals.bioinformatics.ucr.edu/) .
-3.
 
+2. The very comprehensive tutorial section by UC-Riverside [http://manuals.bioinformatics.ucr.edu/](http://manuals.bioinformatics.ucr.edu/) .
+
+3. R-Markdown is a very good tool to document your code, and figure out exactly where you are going wrong. The R Package **knitr**, does a fantastic job and is very well documented. All these class materials have been produced using **knitr**.

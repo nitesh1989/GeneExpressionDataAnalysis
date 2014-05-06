@@ -43,7 +43,7 @@ We are going to use the following packages from bioconductor:
 ### To install the missing packages from Bioconductor use biocLite()
 
 First you need to get the list of available packages
-```{r installBioconductorPackages,echo=FALSE}
+```{r installBioconductorPackages,echo=FALSE,comment=NA}
 installedPckgs <- installed.packages()[,"Package"]
 
 # Here we define the list of desired libraries
@@ -61,7 +61,7 @@ for (pckg in pckgListBIOC) {
 
 Clear the workspace, note the two "embedded" functions
 
-```{r clearWorkSpace}
+```{r clearWorkSpace,comment=NA}
 rm(list=ls())
 ```
 
@@ -85,42 +85,42 @@ dat <- ReadAffy(celfile.path="./data/raw", compress=TRUE)
 Let's have a look at the dat object, so just print. Remember that in R, you can just enter the name of the object
 and it automatically prints.
 ```{r printData}
-# "print(dat)"" is the same as "dat".
+# print(dat) is the same as "dat".
 dat
 ```
 
-Check the Class of the dat object
-```{r dataClass}
+Check the **Class** of the dat object
+```{r dataClass,comment=NA}
 class(dat)
 ```
 
 You can find information about this class as usual
-```{r affyBatchHelp, echo=FALSE}
+```{r affyBatchHelp, echo=FALSE,comment=NA}
 ?AffyBatch
 ```
 
 Check the Dimensions of the object, the structure and information about the annotation of the data. It is important to know how the data is organized, and get some information from the **AffyBatch** class.
-```{r checkDataProperties,eval=TRUE}
+```{r checkDataProperties,eval=TRUE,comment=NA}
 # Dimensions
 dim(dat)
 ```
 
-```{r}
+```{r comment=NA}
 #Structure
 str(dat)
 ```
 
-```{r}
+```{r comment=NA}
 # Information about the platform
 annotation(dat)
 ```
 
-```{r,eval=FALSE}
+```{r comment=NA,eval=FALSE}
 # Information about the features
 head(featureData(dat))
 ```
 
-```{r}
+```{r comment=NA}
 # Information about the samples, also called the phenotype data.
 pData(dat)
 ```
@@ -137,7 +137,7 @@ pheno <- read.table('./data/targets.txt',sep='\t',header=T,
 
 Let's have a look into the phenotypic information, and summarize some useful information.
 
-```{r checkPhenotypeDataProperties,fig.height=5,fig.width=8,comment=""}
+```{r checkPhenotypeDataProperties,fig.height=5,fig.width=8,comment=NA}
 str(pheno)
 # Let's get summarize the data
 summary(pheno)
@@ -148,7 +148,7 @@ plot(pheno$CancerType, pheno$CellType)
 ```
 
 We can add phenotypic information to the AffyBatch object
-```{r mergePhenoData}
+```{r mergePhenoData,comment=NA}
 if(all(rownames(pData(dat))==pheno$Name)){
 	print("You're good, go ahead!")
 	pheno <- merge(pData(dat), pheno, by.x=0, by.y='Name', sort=FALSE)
@@ -195,7 +195,7 @@ Design Matrix
 -------------
 
 To create the design matrix and to fit the linear model we start combining all levels of our factors of interest.
-```{r designMatrix}
+```{r designMatrix,comment=NA}
 groups <- factor(paste(pheno$CancerType, pheno$CellType, sep="."))
 
 # Count the number of sample per group
@@ -226,7 +226,7 @@ Contrasts Matrix
 Let's create now a contrast matrix to extract differences between coefficients.
 
 A contrast matrix using the first design matrix
-```{r contrastsMatrix}
+```{r contrastsMatrix,comment=NA}
 cMat <- makeContrasts(levels=colnames(dMat),
 		 CellType=( ((colon.Epithelial + breast.Epithelial)/2) -
 		 	    		       	    ((Burkitt.Lymphocytes + DLBCL.Lymphocytes)/2) ),
@@ -260,7 +260,7 @@ Fit the model using the first design and contrast matrices
 -----------------------------------------------------------
 
 You might want to learn about __lmFit()__ and __contrasts.fit()__ 
-```{r linearModelFitandEBayes}
+```{r linearModelFitandEBayes,comment=NA}
 fit.ls <- lmFit(dat.rma, dMat, method="ls")
 fit.ls <- contrasts.fit(fit.ls, cMat)
 
@@ -284,7 +284,7 @@ write.fit(eb.ls, file="./text/anovaTable.txt")
 ```
 
 You can retrieve the top differentially expressed genes for a specific contrast in the contrast matrix by name
-```{r retrieveTopDEGenes1}
+```{r retrieveTopDEGenes1,comment=NA}
 tG <- topTable(eb.ls, coef="CellType", number=10, resort="logFC",genelist=rownames(eb.ls))
 tG
 tG <- tG[order(tG$ID),]
@@ -293,7 +293,7 @@ tG <- tG[order(tG$ID),]
 ```
 
 You can retrieve the top differentially expressed genes for a specific contrast in the contrast matrix by index
-```{r retrieveTopDEGenes2}
+```{r retrieveTopDEGenes2,comment=NA}
 tG2 <- topTable(eb2.ls, coef=1, number=10, resort="logFC",genelist=rownames(eb2.ls))
 tG2
 tG2 <- tG2[order(tG2$ID),]
@@ -301,7 +301,7 @@ tG2 <- tG2[order(tG2$ID),]
 ```
 
 The same genes were identified
-```{r checkIfSameGenesWereIdentified}
+```{r checkIfSameGenesWereIdentified,comment=NA}
 all(tG == tG2)
 
 # We can also return ALL the features investigated by using Inf
@@ -329,7 +329,7 @@ nm <- mget(tG2$ID, hgu95aGENENAME, ifnotfound=NA)
 ```
 
 Add the annnotation to differential gene expression results
-```{r addAnnotationToDGEResults}
+```{r addAnnotationToDGEResults,comment=NA}
 tG2ann <- cbind(EGID=unlist(egid), SYMBOL=unlist(sym), GeneName=unlist(nm),
            tG2, stringsAsFactors=FALSE)
 ```
@@ -337,7 +337,7 @@ tG2ann <- cbind(EGID=unlist(egid), SYMBOL=unlist(sym), GeneName=unlist(nm),
 Let's check the results now
 
 Print and see what the what the data frame looks like after adding the annotation.
-```{r checkObjectsAfterAddingAnnotation,eval=FALSE}
+```{r checkObjectsAfterAddingAnnotation,eval=FALSE,comment=NA}
 tG2ann
 
 str(tG2ann)
@@ -348,20 +348,20 @@ str(tG2ann)
 
 Using the "new" and simple method based on select():
 
-```{r retrieveAnnotation}
+```{r retrieveAnnotation,comment=NA}
+### Alternative ###
+### ann <- select(x=hgu95a.db, keys=rownames(tG2),cols=c("ENTREZID", "SYMBOL", "GENENAME"))
+
 ann <- select(x=hgu95a.db, keys=tG2$ID,columns=c("ENTREZID", "SYMBOL", "GENENAME"))
 
-### Alternative ###
-#ann <- select(x=hgu95a.db, keys=rownames(tG2),cols=c("ENTREZID", "SYMBOL", "GENENAME"))
-
-### Check the dimensions of the annotation the results data.frames
+# Check the dimensions of the annotation the results data.frames
 dim(ann)
 dim(tG2)
 ```
 
 Add the annnotation to differential gene expression results
 
-```{r addAnnotationToDGE}
+```{r addAnnotationToDGE,comment=NA}
 # tG2$ID = rownames(tG2)
 tG2ann2 <- merge(x=ann, y=tG2, by.x="PROBEID", by.y="ID", all.x=TRUE, all.y=FALSE)
 
@@ -370,25 +370,24 @@ str(tG2ann2)
 ```
 
 We can save the results as usual for later use
-```{r saveResultsForLaterUse, eval = TRUE}
+```{r saveResultsForLaterUse, eval = TRUE,comment=NA}
 save(tG2, fit2.ls, eb2.ls, dMat2, cMat2, file="./objs/linearModel.rda")
 ```
 
 
 We can also filter the genes and create a report page
-```{r reorderGenes}
+```{r reorderGenes,comment=NA}
 #tmp <- tG2[ tG2$B > 10 , ]
 tmp <- tG2ann2[ tG2ann2$adj.P.Val < 1e-3 , ]
 
 
-### Reorder the columns to have ENTREZID as the first column:
-### hyperlinks to the NCBI ENTREZ GENE database will be generated
+### Reorder the columns to have ENTREZID as the first column: hyperlinks to the NCBI ENTREZ GENE database will be generated
 tmp <- tmp[ , c(2, 1, 3:ncol(tmp)) ]
-
 ```
 
-```{r htmlPage,eval = TRUE}
-### Write the results to an html file
+Write the results to an html file
+```{r htmlPage,eval = TRUE,comment=NA}
+
 htmlpage(as.data.frame(tmp[ , 1]),
 			     filename="./html/result.html",
 			      othernames=as.data.frame(tmp[ , 2:ncol(tmp) ]),
@@ -402,7 +401,7 @@ A few useful plots
 
 We can make a **volcano plot**
 
-```{r volcanoPlot,fig.height=6,fig.width=6}
+```{r volcanoPlot,fig.height=6,fig.width=6,comment=NA}
 volcanoplot(eb2.ls)
 ```
 
@@ -419,7 +418,7 @@ dim(mat)
 ```
 
 Generate a **heatmap()**
-```{r heatMap,fig.height=6,fig.width=6}
+```{r heatMap,fig.height=6,fig.width=6,comment=NA}
 heatmap(mat, scale='none', na.rm=TRUE, margins=c(15,7),
 	     distfun=function(x) {dist(x, method='euclidian')},
 	     hclustfun=function(x) {hclust(x, method='average')},

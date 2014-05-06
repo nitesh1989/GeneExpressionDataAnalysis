@@ -15,7 +15,7 @@ getwd()
 ```
 
 ```
-## [1] "/Users/niteshturaga/Documents/GeneExpressionDataAnalysis/affyData"
+[1] "/Users/niteshturaga/Documents/GeneExpressionDataAnalysis/affyData"
 ```
 
 
@@ -34,7 +34,7 @@ date()
 ```
 
 ```
-## [1] "Mon May  5 16:28:43 2014"
+[1] "Tue May  6 06:46:20 2014"
 ```
 
 
@@ -52,37 +52,37 @@ require(affy)
 ```
 
 ```
-## Loading required package: affy
-## Loading required package: BiocGenerics
-## Loading required package: parallel
-## 
-## Attaching package: 'BiocGenerics'
-## 
-## The following objects are masked from 'package:parallel':
-## 
-##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-##     clusterExport, clusterMap, parApply, parCapply, parLapply,
-##     parLapplyLB, parRapply, parSapply, parSapplyLB
-## 
-## The following object is masked from 'package:stats':
-## 
-##     xtabs
-## 
-## The following objects are masked from 'package:base':
-## 
-##     anyDuplicated, append, as.data.frame, as.vector, cbind,
-##     colnames, duplicated, eval, evalq, Filter, Find, get,
-##     intersect, is.unsorted, lapply, Map, mapply, match, mget,
-##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
-##     rbind, Reduce, rep.int, rownames, sapply, setdiff, sort,
-##     table, tapply, union, unique, unlist
-## 
-## Loading required package: Biobase
-## Welcome to Bioconductor
-## 
-##     Vignettes contain introductory material; view with
-##     'browseVignettes()'. To cite Bioconductor, see
-##     'citation("Biobase")', and for packages 'citation("pkgname")'.
+Loading required package: affy
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: 'BiocGenerics'
+
+The following objects are masked from 'package:parallel':
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following object is masked from 'package:stats':
+
+    xtabs
+
+The following objects are masked from 'package:base':
+
+    anyDuplicated, append, as.data.frame, as.vector, cbind,
+    colnames, duplicated, eval, evalq, Filter, Find, get,
+    intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rep.int, rownames, sapply, setdiff, sort,
+    table, tapply, union, unique, unlist
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
 ```
 
 ```r
@@ -90,10 +90,10 @@ require(hgu95a.db)
 ```
 
 ```
-## Loading required package: hgu95a.db
-## Loading required package: AnnotationDbi
-## Loading required package: org.Hs.eg.db
-## Loading required package: DBI
+Loading required package: hgu95a.db
+Loading required package: AnnotationDbi
+Loading required package: org.Hs.eg.db
+Loading required package: DBI
 ```
 
 
@@ -126,9 +126,9 @@ class(dat)
 ```
 
 ```
-## [1] "AffyBatch"
-## attr(,"package")
-## [1] "affy"
+[1] "AffyBatch"
+attr(,"package")
+[1] "affy"
 ```
 
 ```r
@@ -138,9 +138,9 @@ class(dat.rma)
 ```
 
 ```
-## [1] "ExpressionSet"
-## attr(,"package")
-## [1] "Biobase"
+[1] "ExpressionSet"
+attr(,"package")
+[1] "Biobase"
 ```
 
 
@@ -155,10 +155,10 @@ slotNames(dat)
 ```
 
 ```
-##  [1] "cdfName"           "nrow"              "ncol"             
-##  [4] "assayData"         "phenoData"         "featureData"      
-##  [7] "experimentData"    "annotation"        "protocolData"     
-## [10] ".__classVersion__"
+ [1] "cdfName"           "nrow"              "ncol"             
+ [4] "assayData"         "phenoData"         "featureData"      
+ [7] "experimentData"    "annotation"        "protocolData"     
+[10] ".__classVersion__"
 ```
 
 ```r
@@ -166,9 +166,9 @@ slotNames(dat.rma)
 ```
 
 ```
-## [1] "experimentData"    "assayData"         "phenoData"        
-## [4] "featureData"       "annotation"        "protocolData"     
-## [7] ".__classVersion__"
+[1] "experimentData"    "assayData"         "phenoData"        
+[4] "featureData"       "annotation"        "protocolData"     
+[7] ".__classVersion__"
 ```
 
 
@@ -180,7 +180,7 @@ dim(dat.expr)
 ```
 
 ```
-## [1] 12626    13
+[1] 12626    13
 ```
 
 
@@ -191,34 +191,34 @@ pData(dat.rma)
 ```
 
 ```
-##                         Row.names sample   CellLine CancerType    CellType
-## GSM133995.CEL.gz GSM133995.CEL.gz      1       MCF7     breast  Epithelial
-## GSM134000.CEL.gz GSM134000.CEL.gz      2 MDA-MB-231     breast  Epithelial
-## GSM134015.CEL.gz GSM134015.CEL.gz      3      T-47D     breast  Epithelial
-## GSM134050.CEL.gz GSM134050.CEL.gz      4    COLO205      colon  Epithelial
-## GSM134060.CEL.gz GSM134060.CEL.gz      5    HCT-116      colon  Epithelial
-## GSM134070.CEL.gz GSM134070.CEL.gz      6       HT29      colon  Epithelial
-## GSM44082.CEL.gz   GSM44082.CEL.gz      7      Ramos    Burkitt Lymphocytes
-## GSM44083.CEL.gz   GSM44083.CEL.gz      8      P3HR1    Burkitt Lymphocytes
-## GSM44084.CEL.gz   GSM44084.CEL.gz      9      ST486    Burkitt Lymphocytes
-## GSM44088.CEL.gz   GSM44088.CEL.gz     10        Ly1      DLBCL Lymphocytes
-## GSM44089.CEL.gz   GSM44089.CEL.gz     11       Ly10      DLBCL Lymphocytes
-## GSM44091.CEL.gz   GSM44091.CEL.gz     12        Ly4      DLBCL Lymphocytes
-## GSM44092.CEL.gz   GSM44092.CEL.gz     13        Ly7      DLBCL Lymphocytes
-##                                                  Comment
-## GSM133995.CEL.gz                 Breast cancer cell line
-## GSM134000.CEL.gz                 Breast cancer cell line
-## GSM134015.CEL.gz                 Breast cancer cell line
-## GSM134050.CEL.gz                  Colon cancer cell line
-## GSM134060.CEL.gz                  Colon cancer cell line
-## GSM134070.CEL.gz                  Colon cancer cell line
-## GSM44082.CEL.gz               Burkitt lymphoma cell line
-## GSM44083.CEL.gz               Burkitt lymphoma cell line
-## GSM44084.CEL.gz               Burkitt lymphoma cell line
-## GSM44088.CEL.gz  Diffuse large B cell lymphoma cell line
-## GSM44089.CEL.gz  Diffuse large B cell lymphoma cell line
-## GSM44091.CEL.gz  Diffuse large B cell lymphoma cell line
-## GSM44092.CEL.gz  Diffuse large B cell lymphoma cell line
+                        Row.names sample   CellLine CancerType    CellType
+GSM133995.CEL.gz GSM133995.CEL.gz      1       MCF7     breast  Epithelial
+GSM134000.CEL.gz GSM134000.CEL.gz      2 MDA-MB-231     breast  Epithelial
+GSM134015.CEL.gz GSM134015.CEL.gz      3      T-47D     breast  Epithelial
+GSM134050.CEL.gz GSM134050.CEL.gz      4    COLO205      colon  Epithelial
+GSM134060.CEL.gz GSM134060.CEL.gz      5    HCT-116      colon  Epithelial
+GSM134070.CEL.gz GSM134070.CEL.gz      6       HT29      colon  Epithelial
+GSM44082.CEL.gz   GSM44082.CEL.gz      7      Ramos    Burkitt Lymphocytes
+GSM44083.CEL.gz   GSM44083.CEL.gz      8      P3HR1    Burkitt Lymphocytes
+GSM44084.CEL.gz   GSM44084.CEL.gz      9      ST486    Burkitt Lymphocytes
+GSM44088.CEL.gz   GSM44088.CEL.gz     10        Ly1      DLBCL Lymphocytes
+GSM44089.CEL.gz   GSM44089.CEL.gz     11       Ly10      DLBCL Lymphocytes
+GSM44091.CEL.gz   GSM44091.CEL.gz     12        Ly4      DLBCL Lymphocytes
+GSM44092.CEL.gz   GSM44092.CEL.gz     13        Ly7      DLBCL Lymphocytes
+                                                 Comment
+GSM133995.CEL.gz                 Breast cancer cell line
+GSM134000.CEL.gz                 Breast cancer cell line
+GSM134015.CEL.gz                 Breast cancer cell line
+GSM134050.CEL.gz                  Colon cancer cell line
+GSM134060.CEL.gz                  Colon cancer cell line
+GSM134070.CEL.gz                  Colon cancer cell line
+GSM44082.CEL.gz               Burkitt lymphoma cell line
+GSM44083.CEL.gz               Burkitt lymphoma cell line
+GSM44084.CEL.gz               Burkitt lymphoma cell line
+GSM44088.CEL.gz  Diffuse large B cell lymphoma cell line
+GSM44089.CEL.gz  Diffuse large B cell lymphoma cell line
+GSM44091.CEL.gz  Diffuse large B cell lymphoma cell line
+GSM44092.CEL.gz  Diffuse large B cell lymphoma cell line
 ```
 
 The **annotation** function extracts features information
@@ -228,7 +228,7 @@ annotation(dat.rma)
 ```
 
 ```
-## [1] "hgu95a"
+[1] "hgu95a"
 ```
 
 
@@ -240,7 +240,7 @@ dat.pm <- pm(dat)
 ```
 
 ```
-## 
+
 ```
 
 ```r
@@ -248,7 +248,7 @@ dim(dat.pm)
 ```
 
 ```
-## [1] 201807     13
+[1] 201807     13
 ```
 
 
@@ -261,7 +261,7 @@ dim(dat.mm)
 ```
 
 ```
-## [1] 201807     13
+[1] 201807     13
 ```
 
 
@@ -269,6 +269,7 @@ MA Plot
 ---------
 
 $M = log_{2}(R/G) = log_{2}(R) - log_{2}(G)$
+
 $A = \frac{1}{2}log_{2}(R*G) = \frac{1}{2}(log_{2}(R) + log_{2}(G))$
 
 ### We can now make an MA-plot
@@ -287,19 +288,16 @@ mypar <- function(nRow = 1, nCol = 1, ptsExp = 1) {
 
 
 
-###################################################
-### We can compute rows and columns number based on the nuber of samples
-### You can do this also manually....
+We can compute rows and columns number based on the nuber of samples.
+You can do this also manually:
 
 ```r
 nc <- ceiling(sqrt(ncol(dat.rma)))
 nr <- ceiling(ncol(dat.rma)/nc)
 ```
 
-###################################################
 
-
-### We can make a plot for the raw data, before normalization
+We can make a plot for the raw data, before normalization
 
 ```r
 mypar(nr, nc, 0.5)
@@ -307,8 +305,8 @@ MAplot(dat[, ], pairs = F, plot.method = "smoothScatter")
 ```
 
 ```
-## KernSmooth 2.23 loaded
-## Copyright M. P. Wand 1997-2009
+KernSmooth 2.23 loaded
+Copyright M. P. Wand 1997-2009
 ```
 
 ![plot of chunk MAplot](figure/MAplot.png) 
@@ -325,8 +323,8 @@ dev.off()
 ```
 
 ```
-## pdf 
-##   2
+pdf 
+  2 
 ```
 
 
@@ -368,8 +366,8 @@ dev.off()
 ```
 
 ```
-## pdf 
-##   2
+pdf 
+  2 
 ```
 
 
@@ -386,8 +384,8 @@ dev.off()
 ```
 
 ```
-## pdf 
-##   2
+pdf 
+  2 
 ```
 
 
@@ -409,13 +407,15 @@ dev.off()
 ```
 
 ```
-## pdf 
-##   2
+pdf 
+  2 
 ```
 
 
 
-### Compute RNA degradation
+### RNA Degradation
+
+Compute RNA degradation
 
 ```r
 deg <- AffyRNAdeg(dat)
@@ -423,7 +423,7 @@ deg <- AffyRNAdeg(dat)
 
 
 
-### Make RNA degradation plot
+Make RNA degradation plot
 
 ```r
 bitmap(file = "./figs/degRNA.png", width = 5, height = 5, res = 1000)
@@ -436,12 +436,12 @@ dev.off()
 ```
 
 ```
-## pdf 
-##   2
+pdf 
+  2 
 ```
 
 
-### Find the scan date
+Find the scan date
 
 ```r
 dateOfScan <- protocolData(dat.rma)@data$ScanDate
@@ -451,7 +451,7 @@ boxplot(log2(exprs(dat)), col = 1 + as.numeric(dateOfScan))
 ```
 
 ```
-## Warning: NAs introduced by coercion
+Warning: NAs introduced by coercion
 ```
 
 ![plot of chunk dateOfScan](figure/dateOfScan.png) 
@@ -464,26 +464,26 @@ sessionInfo()
 ```
 
 ```
-## R version 3.0.3 (2014-03-06)
-## Platform: x86_64-apple-darwin13.1.0 (64-bit)
-## 
-## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-## 
-## attached base packages:
-## [1] parallel  stats     graphics  grDevices utils     datasets  methods  
-## [8] base     
-## 
-## other attached packages:
-##  [1] hgu95acdf_2.13.0     hgu95a.db_2.10.1     org.Hs.eg.db_2.10.1 
-##  [4] RSQLite_0.11.4       DBI_0.2-7            AnnotationDbi_1.24.0
-##  [7] affy_1.40.0          Biobase_2.22.0       BiocGenerics_0.8.0  
-## [10] knitr_1.5           
-## 
-## loaded via a namespace (and not attached):
-##  [1] affyio_1.30.0         BiocInstaller_1.12.1  evaluate_0.5.5       
-##  [4] formatR_0.10          IRanges_1.20.7        KernSmooth_2.23-12   
-##  [7] preprocessCore_1.24.0 stats4_3.0.3          stringr_0.6.2        
-## [10] tools_3.0.3           zlibbioc_1.8.0
+R version 3.0.3 (2014-03-06)
+Platform: x86_64-apple-darwin13.1.0 (64-bit)
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] hgu95acdf_2.13.0     hgu95a.db_2.10.1     org.Hs.eg.db_2.10.1 
+ [4] RSQLite_0.11.4       DBI_0.2-7            AnnotationDbi_1.24.0
+ [7] affy_1.40.0          Biobase_2.22.0       BiocGenerics_0.8.0  
+[10] knitr_1.5           
+
+loaded via a namespace (and not attached):
+ [1] affyio_1.30.0         BiocInstaller_1.12.1  evaluate_0.5.5       
+ [4] formatR_0.10          IRanges_1.20.7        KernSmooth_2.23-12   
+ [7] preprocessCore_1.24.0 stats4_3.0.3          stringr_0.6.2        
+[10] tools_3.0.3           zlibbioc_1.8.0       
 ```
 
