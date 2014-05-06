@@ -232,8 +232,7 @@ newDmat <- data.frame(
 
 Run the test on one FGS: the contrast is the column index from the design matrix
 ```{r comment=NA}
-# roast(iset= sel, y=mat, design=newDmat, contrast=2)
-roast( y=mat, design=newDmat, contrast=2)
+roast( y=mat,index=sel, design=newDmat, contrast=2)
 ```
 
 The test on the first five FGS for KEGG
@@ -241,10 +240,7 @@ The test on the first five FGS for KEGG
 gse2 <- list()
 for (i in 1:5){
 	sel <- rownames(mat)%in%kegg[[i]]
-#   mat = mat[all(sel)]
-#   table(sel)
-#   gse2[[i]] <- roast(sel, mat, design=newDmat, contrast=2)
-gse2[[i]] <- roast(mat, design=newDmat, contrast=2)
+  gse2[[i]] <- roast(mat,index=sel,design=newDmat, contrast=2)
 	names(gse2)[i] <- names(kegg)[i]
 }
 ```
@@ -254,8 +250,7 @@ The test on the first five FGS for GO
 gse.go <- list()
 for (i in 1:5){
 	sel <- rownames(mat)%in%go[[i]]
-# 	gse.go[[i]] <- roast(sel, mat, design=newDmat, contrast=2)
-  gse.go[[i]] <- roast(mat, design=newDmat, contrast=2)
+  gse.go[[i]] <- roast(mat,index=sel, design=newDmat, contrast=2)
 	names(gse.go)[i] <- names(go)[i]
 }
 ```

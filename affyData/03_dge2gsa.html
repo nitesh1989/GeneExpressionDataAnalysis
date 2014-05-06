@@ -203,7 +203,7 @@ hljs.initHighlightingOnLoad();
 <pre><code class="r">date()
 </code></pre>
 
-<pre><code>[1] &quot;Tue May  6 07:24:33 2014&quot;
+<pre><code>[1] &quot;Tue May  6 09:39:24 2014&quot;
 </code></pre>
 
 <p>Clear the workspace, note the two &ldquo;embedded&rdquo; functions</p>
@@ -533,7 +533,7 @@ args(geneSetTest)
     nsim = 1000)
 </code></pre>
 
-<pre><code>[1] 0.005994
+<pre><code>[1] 0.000999
 </code></pre>
 
 <pre><code class="r">
@@ -541,7 +541,7 @@ geneSetTest(tG2$ID %in% kegg[[94]], tG2$t, alternative = &quot;down&quot;, type 
     ranks.only = FALSE, nsim = 1000)
 </code></pre>
 
-<pre><code>[1] 0.5095
+<pre><code>[1] 0.5275
 </code></pre>
 
 <p><strong>limma</strong> enables you to run also self-contained tests as opposed to competitive tests.
@@ -565,14 +565,13 @@ To do this you can use the <strong>roast()</strong> function</p>
 
 <p>Run the test on one FGS: the contrast is the column index from the design matrix</p>
 
-<pre><code class="r"># roast(iset= sel, y=mat, design=newDmat, contrast=2)
-roast(y = mat, design = newDmat, contrast = 2)
+<pre><code class="r">roast(y = mat, index = sel, design = newDmat, contrast = 2)
 </code></pre>
 
 <pre><code>      Active.Prop P.Value
-Down      0.05053   0.949
-Up        0.10494   0.052
-Mixed     0.15547   0.377
+Down       0.0274   0.912
+Up         0.1233   0.089
+Mixed      0.1507   0.338
 </code></pre>
 
 <p>The test on the first five FGS for KEGG</p>
@@ -580,9 +579,7 @@ Mixed     0.15547   0.377
 <pre><code class="r">gse2 &lt;- list()
 for (i in 1:5) {
     sel &lt;- rownames(mat) %in% kegg[[i]]
-    # mat = mat[all(sel)] table(sel) gse2[[i]] &lt;- roast(sel, mat,
-    # design=newDmat, contrast=2)
-    gse2[[i]] &lt;- roast(mat, design = newDmat, contrast = 2)
+    gse2[[i]] &lt;- roast(mat, index = sel, design = newDmat, contrast = 2)
     names(gse2)[i] &lt;- names(kegg)[i]
 }
 </code></pre>
@@ -592,8 +589,7 @@ for (i in 1:5) {
 <pre><code class="r">gse.go &lt;- list()
 for (i in 1:5) {
     sel &lt;- rownames(mat) %in% go[[i]]
-    # gse.go[[i]] &lt;- roast(sel, mat, design=newDmat, contrast=2)
-    gse.go[[i]] &lt;- roast(mat, design = newDmat, contrast = 2)
+    gse.go[[i]] &lt;- roast(mat, index = sel, design = newDmat, contrast = 2)
     names(gse.go)[i] &lt;- names(go)[i]
 }
 </code></pre>

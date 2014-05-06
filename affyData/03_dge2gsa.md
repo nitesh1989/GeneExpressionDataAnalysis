@@ -32,7 +32,7 @@ date()
 ```
 
 ```
-[1] "Tue May  6 07:24:33 2014"
+[1] "Tue May  6 09:39:24 2014"
 ```
 
 
@@ -436,7 +436,7 @@ geneSetTest(tG2$ID %in% kegg[[1]], tG2$t, alternative = "up", type = "t", ranks.
 ```
 
 ```
-[1] 0.005994
+[1] 0.000999
 ```
 
 ```r
@@ -446,7 +446,7 @@ geneSetTest(tG2$ID %in% kegg[[94]], tG2$t, alternative = "down", type = "t",
 ```
 
 ```
-[1] 0.5095
+[1] 0.5275
 ```
 
 
@@ -482,15 +482,14 @@ newDmat <- data.frame(Intercept = 1, CellType = dMat2[, 1] + dMat2[, 2] + (-1 *
 Run the test on one FGS: the contrast is the column index from the design matrix
 
 ```r
-# roast(iset= sel, y=mat, design=newDmat, contrast=2)
-roast(y = mat, design = newDmat, contrast = 2)
+roast(y = mat, index = sel, design = newDmat, contrast = 2)
 ```
 
 ```
       Active.Prop P.Value
-Down      0.05053   0.949
-Up        0.10494   0.052
-Mixed     0.15547   0.377
+Down       0.0274   0.912
+Up         0.1233   0.089
+Mixed      0.1507   0.338
 ```
 
 
@@ -500,9 +499,7 @@ The test on the first five FGS for KEGG
 gse2 <- list()
 for (i in 1:5) {
     sel <- rownames(mat) %in% kegg[[i]]
-    # mat = mat[all(sel)] table(sel) gse2[[i]] <- roast(sel, mat,
-    # design=newDmat, contrast=2)
-    gse2[[i]] <- roast(mat, design = newDmat, contrast = 2)
+    gse2[[i]] <- roast(mat, index = sel, design = newDmat, contrast = 2)
     names(gse2)[i] <- names(kegg)[i]
 }
 ```
@@ -514,8 +511,7 @@ The test on the first five FGS for GO
 gse.go <- list()
 for (i in 1:5) {
     sel <- rownames(mat) %in% go[[i]]
-    # gse.go[[i]] <- roast(sel, mat, design=newDmat, contrast=2)
-    gse.go[[i]] <- roast(mat, design = newDmat, contrast = 2)
+    gse.go[[i]] <- roast(mat, index = sel, design = newDmat, contrast = 2)
     names(gse.go)[i] <- names(go)[i]
 }
 ```

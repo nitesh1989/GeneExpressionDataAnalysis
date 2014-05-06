@@ -1,4 +1,4 @@
-Basic R for Gene Expression Data Analysis
+Basic R and Other Resources
 ========================================================
 
 Goal: To introduce a few useful commands and tools in R.
@@ -21,3 +21,7 @@ Useful resources for the class and life after
 2. The very comprehensive tutorial section by UC-Riverside [http://manuals.bioinformatics.ucr.edu/](http://manuals.bioinformatics.ucr.edu/) .
 
 3. R-Markdown is a very good tool to document your code, and figure out exactly where you are going wrong. The R Package **knitr**, does a fantastic job and is very well documented. All these class materials have been produced using **knitr**.
+
+4. **limma** vignette which is available on Bioconductor. [http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf](http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf)
+
+5. More information on how to make robust design matrices for experiments can be found in, **Statistics for Biology and Health - Springer**, **Chapter V, Page 399-417**.
