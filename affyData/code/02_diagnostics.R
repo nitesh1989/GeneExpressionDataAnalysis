@@ -1,6 +1,7 @@
 ###################################################
 ### Luigi Marchionni
-### May 10, 2013
+### Edited by: Nitesh Turaga
+### May 9, 2014
 ### Goal: from Affymetrix raw data stored in CEL files to differential gene expression
 
 
@@ -11,7 +12,7 @@ getwd()
 
 ###################################################
 ### Setting the working directory, in my case
-setwd("~/3EDUCATION/myRtutorials/affyData")
+setwd("~/Documents/GeneExpressionDataAnalysis/affyData/")
 
 
 ###################################################
@@ -73,8 +74,8 @@ dim(dat.mm)
 
 ##################################################
 ### We can now make an MA-plot
-
 ###################################################
+
 ###We first define a function to divide the plotting area in rows and columns
 mypar <- function (nRow = 1, nCol = 1, ptsExp = 1) {
 	par(mar = c(2, 2, 2, 1))

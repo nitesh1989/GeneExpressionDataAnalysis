@@ -1,6 +1,7 @@
 ###################################################
 ### Luigi Marchionni
-### May 10, 2013
+### Edited by: Nitesh Turaga
+### May 9, 2014
 ### Goal: from Affymetrix raw data stored in CEL files to differential gene expression
 
 
@@ -11,7 +12,7 @@ getwd()
 
 ###################################################
 ### Setting the working directory, in my case
-setwd("~/3EDUCATION/myRtutorials/affyData")
+setwd("~/Documents/GitHub/GeneExpressionDataAnalysis/affyData/")
 
 
 ###################################################
@@ -34,10 +35,10 @@ require(annotate)
 
 ###################################################
 ### Load  gene expression
-load("objs/affyData.rda")
+load("./objs/affyData.rda")
 
 ### Load  linear model results
-load("objs/linearModel.rda")
+load("./objs/linearModel.rda")
 
 
 ###################################################
@@ -85,7 +86,7 @@ geneSetTest(tG2$ID%in%kegg[[1]],tG2$t,alternative="down")
 geneSetTest(tG2$ID%in%kegg[[1]],tG2$t,alternative="up")
 
 ### Visual representation
-barcodeplot(tG2$ID%in%kegg[[1]],tG2$t)
+barcodeplot(tG2$t,tG2$ID%in%kegg[[1]])
 
 ### The test on all KEGG  FGS (after removing NA
 kegg2 <- kegg[!is.na(kegg)]
@@ -124,15 +125,15 @@ str(gse)
 
 ### This is the way we can visualize this: the first gene set
 i=10
-barcodeplot(tG2$ID%in%kegg[[i]],tG2$t)
+barcodeplot(tG2$t,tG2$ID%in%kegg[[i]])
 
 ### This is the way we can visualize this: the smallest pvalue
 i=which.min(gse)
-barcodeplot(tG2$ID%in%kegg[[i]],tG2$t)
+barcodeplot(tG2$t,tG2$ID%in%kegg[[i]])
 
 ### This is the way we can visualize this: the larest pvalue
 i=which.max(gse)
-barcodeplot(tG2$ID%in%kegg[[i]],tG2$t)
+barcodeplot(tG2$t,tG2$ID%in%kegg[[i]])
 
 
 ##################################################
@@ -175,14 +176,14 @@ newDmat <- data.frame(
 		      )
 
 ### Run the test on one FGS: the contrast is the column index from the design matrix
-roast(iset= sel, y=mat, design=newDmat, contrast=2)
+roast( y=mat,index= sel, design=newDmat, contrast=2)
 
 
 ### The test on the first five FGS for KEGG
 gse2 <- list()
 for (i in 1:5){
 	sel <- rownames(mat)%in%kegg[[i]]
-	gse2[[i]] <- roast(sel, mat, design=newDmat, contrast=2)
+	gse2[[i]] <- roast( mat,sel, design=newDmat, contrast=2)
 	names(gse2)[i] <- names(kegg)[i]
 }
 
@@ -191,7 +192,7 @@ for (i in 1:5){
 gse.go <- list()
 for (i in 1:5){
 	sel <- rownames(mat)%in%go[[i]]
-	gse.go[[i]] <- roast(sel, mat, design=newDmat, contrast=2)
+	gse.go[[i]] <- roast(mat,sel, design=newDmat, contrast=2)
 	names(gse.go)[i] <- names(go)[i]
 }
 

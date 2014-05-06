@@ -4,7 +4,7 @@ Gene Expression Analysis
 Nitesh Turaga, Johns Hopkins University, Email: nturaga1@jhmi.edu 
 
 
-Original Code by: **Luigi Marchionni, MD, PhD**, Johns Hopkins University
+Original Code by: **Luigi Marchionni, MD, PhD**, Johns Hopkins University, Email: marchion@jhu.edu
 
 
 
@@ -50,6 +50,23 @@ Instructions:
 
 4. In each of the files, prior to running the R Code, you have to change the working directory. This is crucial.
 
+5. Please install the following packages once you have R(version 3.0 and above) and RStudio running. You can copy and paste the code below to install and update the packages.
+
+```{r installPackages,eval=FALSE}
+installedPckgs <- installed.packages()[,"Package"]
+
+### Here we define the list of desired libraries
+pckgListBIOC <- c("affy", "limma", "hgu95a.db", "annotate","multtest","KEGG.db","GO.db")
+
+### We source the biocLite.R script from the Bioconductor website
+source("http://bioconductor.org/biocLite.R")
+
+### Load the packages, or install them from Bioconductor if needed
+for (pckg in pckgListBIOC) {
+    if (! pckg %in% installedPckgs) biocLite(pckg)
+	require(pckg, character.only=TRUE)
+}
+```
 
 
 
