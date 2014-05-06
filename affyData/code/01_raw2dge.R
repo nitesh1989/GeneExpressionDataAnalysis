@@ -1,6 +1,7 @@
 ###################################################
+### Nitesh Turaga
 ### Luigi Marchionni
-### May 10, 2013
+### May 6, 2014
 
 ### Goal: from Affymetrix raw data stored in CEL files to differential gene expression
 
@@ -13,9 +14,7 @@ getwd()
 ###################################################
 ### Setting the working directory, in my case
 
-setwd("~/Documents/Feb142014-backup/Documents/JHMI-Research/Luigi_GeneExpression_TA/affyData")
-#setwd("~/3EDUCATION/myRtutorials/affyData")
-
+setwd("~/Documents/GeneExpressionDataAnalysis/affyData/")
 
 ###################################################
 ### Check the data
@@ -254,14 +253,14 @@ write.fit(eb.ls, file="./text/anovaTable.txt")
 ###################################################
 ### You can retrieve the top differentially expressed genes for a specific
 ### contrast in the contrast matrix by name
-tG <- topTable(eb.ls, coef="CellType", number=10, resort="logFC")
+tG <- topTable(eb.ls, coef="CellType", number=10, resort="logFC",genelist=rownames(eb.ls))
 tG <- tG[order(tG$ID),]
 
 
 ###################################################
 ### You can retrieve the top differentially expressed genes for a specific
 ### contrast in the contrast matrix by index
-tG2 <- topTable(eb2.ls, coef=1, number=10, resort="logFC")
+tG2 <- topTable(eb2.ls, coef=1, number=10, resort="logFC",genelist=rownames(eb2.ls))
 tG2 <- tG2[order(tG2$ID),]
 
 
@@ -272,7 +271,7 @@ all(tG == tG2)
 
 ###################################################
 ### We can also return ALL the features investigated by using Inf
-tG2 <- topTable(eb2.ls, coef=1, number=Inf, resort="logFC")
+tG2 <- topTable(eb2.ls, coef=1, number=Inf, resort="logFC",genelist=rownames(eb2.ls))
 
 
 ###################################################
@@ -308,7 +307,7 @@ str(tG2ann)
 ### Retrieve and add gene SYMBOLS, ENTREZID, and GENENAME
 ### Using the "new" and simple method based on select():
 ann <- select(x=hgu95a.db, keys=tG2$ID,
-	      cols=c("ENTREZID", "SYMBOL", "GENENAME"))
+	      columns=c("ENTREZID", "SYMBOL", "GENENAME"))
 
 ### Check the dimensions of the annotation the results data.frames
 dim(ann)
@@ -399,3 +398,4 @@ sessionInfo()
 
 ### Quit
 q("no")
+
