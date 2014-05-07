@@ -24,4 +24,4 @@ Useful resources for the class and life after
 
 4. **limma** vignette which is available on Bioconductor. [http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf](http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf)
 
-5. More information on how to make robust design matrices for experiments can be found in, **Statistics for Biology and Health - Springer**, **Chapter V, Page 399-417**.
+5. More information on how to make robust design matrices for experiments can be found in, **Statistics for Biology and Health - Springer**, **Chapter V, Page 399-417**.[http://www.statsci.org/smyth/pubs/limma-biocbook-reprint.pdf](http://www.statsci.org/smyth/pubs/limma-biocbook-reprint.pdf)
