@@ -1,6 +1,8 @@
 ### R code from vignette source 'GeneSetAnalysis.Rnw'
 ### Encoding: UTF-8
 
+setwd("~/Documents/GitHub/GeneExpressionDataAnalysis/GeneSetAnalysis/")
+
 ###################################################
 ### code chunk number 1: start
 ###################################################
@@ -217,7 +219,7 @@ hist(gseABS.sep.BH$dat.affy$go[ , "BH"], nclass=10, col="orange",
 ###################################################
 ### code chunk number 23: readAndProcessData
 ###################################################
-autismGenes <- read.table("myData/101symbols_v02.txt", sep="\t", header=TRUE,
+autismGenes <- read.table("./data/101symbols_v02.txt", sep="\t", header=TRUE,
                           colClasses="character")
 str(autismGenes)
 

@@ -53,10 +53,11 @@ Instructions:
 5. Please install the following packages once you have R(version 3.0 and above) and RStudio running. You can copy and paste the code below to install and update the packages.
 
 ```{r installPackages,eval=FALSE}
+
 installedPckgs <- installed.packages()[,"Package"]
 
 ### Here we define the list of desired libraries
-pckgListBIOC <- c("affy", "limma", "hgu95a.db", "annotate","multtest","KEGG.db","GO.db")
+pckgListBIOC <- c("affy", "limma", "hgu95a.db", "annotate","multtest","KEGG.db","GO.db","RTopper")
 
 ### We source the biocLite.R script from the Bioconductor website
 source("http://bioconductor.org/biocLite.R")
@@ -65,8 +66,15 @@ source("http://bioconductor.org/biocLite.R")
 for (pckg in pckgListBIOC) {
     if (! pckg %in% installedPckgs) biocLite(pckg)
 	require(pckg, character.only=TRUE)
+
 }
+
 ```
 
+I am printing my session information to show my R configuration when I ran this code.
+
+```{r}
+sessionInfo()
+```
 
 

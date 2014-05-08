@@ -54,11 +54,12 @@ Instructions:
 
 
 ```r
+
 installedPckgs <- installed.packages()[, "Package"]
 
 ### Here we define the list of desired libraries
 pckgListBIOC <- c("affy", "limma", "hgu95a.db", "annotate", "multtest", "KEGG.db", 
-    "GO.db")
+    "GO.db", "RTopper")
 
 ### We source the biocLite.R script from the Bioconductor website
 source("http://bioconductor.org/biocLite.R")
@@ -68,9 +69,39 @@ for (pckg in pckgListBIOC) {
     if (!pckg %in% installedPckgs) 
         biocLite(pckg)
     require(pckg, character.only = TRUE)
+    
 }
+
 ```
 
+
+I am printing my session information to show my R configuration when I ran this code.
+
+
+```r
+sessionInfo()
+```
+
+```
+## R version 3.0.1 (2013-05-16)
+## Platform: x86_64-w64-mingw32/x64 (64-bit)
+## 
+## locale:
+## [1] LC_COLLATE=English_United States.1252 
+## [2] LC_CTYPE=English_United States.1252   
+## [3] LC_MONETARY=English_United States.1252
+## [4] LC_NUMERIC=C                          
+## [5] LC_TIME=English_United States.1252    
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] knitr_1.5
+## 
+## loaded via a namespace (and not attached):
+## [1] evaluate_0.5.5 formatR_0.10   stringr_0.6.2  tools_3.0.1
+```
 
 
 
