@@ -99,6 +99,11 @@ To run a Wilcoxon rank-sum test we can use the **geneSetTest()** function in lim
 we need to identify the genes in the FGS, and give also a ranking statistics.
 To this end we will use the t-statistics obtained using the topTable() function
 
+The **geneSetTest()** tests whether genes in the set are more differentially expressed than genes not in the set. 
+
+By contrast, a self-contained gene set test such as **roast()** tests whether genes in the test set are differentially expressed, in an absolute sense, without regard to any other genes on the array.
+
+
 
 The test on the fisrt FGS: default parameters
 ```{r wilcoxonRankSumTest,comment=NA}

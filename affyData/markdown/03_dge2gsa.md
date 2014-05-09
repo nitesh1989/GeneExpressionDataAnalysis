@@ -32,7 +32,7 @@ date()
 ```
 
 ```
-[1] "Tue May  6 09:39:24 2014"
+[1] "Thu May  8 23:09:56 2014"
 ```
 
 
@@ -262,6 +262,11 @@ To run a Wilcoxon rank-sum test we can use the **geneSetTest()** function in lim
 we need to identify the genes in the FGS, and give also a ranking statistics.
 To this end we will use the t-statistics obtained using the topTable() function
 
+The **geneSetTest()** tests whether genes in the set are more differentially expressed than genes not in the set. 
+
+By contrast, a self-contained gene set test such as **roast()** tests whether genes in the test set are differentially expressed, in an absolute sense, without regard to any other genes on the array.
+
+
 
 The test on the fisrt FGS: default parameters
 
@@ -436,7 +441,7 @@ geneSetTest(tG2$ID %in% kegg[[1]], tG2$t, alternative = "up", type = "t", ranks.
 ```
 
 ```
-[1] 0.000999
+[1] 0.001998
 ```
 
 ```r
@@ -446,7 +451,7 @@ geneSetTest(tG2$ID %in% kegg[[94]], tG2$t, alternative = "down", type = "t",
 ```
 
 ```
-[1] 0.5275
+[1] 0.4895
 ```
 
 
@@ -487,9 +492,9 @@ roast(y = mat, index = sel, design = newDmat, contrast = 2)
 
 ```
       Active.Prop P.Value
-Down       0.0274   0.912
-Up         0.1233   0.089
-Mixed      0.1507   0.338
+Down       0.0274   0.929
+Up         0.1233   0.072
+Mixed      0.1507   0.334
 ```
 
 

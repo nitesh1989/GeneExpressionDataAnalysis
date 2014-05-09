@@ -34,7 +34,7 @@ date()
 ```
 
 ```
-[1] "Tue May  6 06:46:20 2014"
+[1] "Thu May  8 21:43:06 2014"
 ```
 
 
@@ -147,7 +147,12 @@ attr(,"package")
 Access to data in the class
 ---------------------------
 
-Slots/elements contained in the two classes can be seen using:
+Slots/elements contained in the two classes can be seen using: 
+Both **AffyBatch** and **ExpressionSet** are classes which **EXTENDS** the functionality
+of an **Biobase::eSet**. When a class X **EXTENDS** another base class Y, it means that,
+you have all the basic functionality of the parent class, and X also adds some functionality of
+its own. This is very popular in object oriented programming, called Inheritance.
+
 __NOTE: SLOT NAMES USUALLY WORK AS ACCESSORS__
 
 ```r
@@ -268,21 +273,28 @@ dim(dat.mm)
 MA Plot 
 ---------
 
+**MA-plots** are used to study dependences between the log ratio of two variables and the mean values of the same two variables. The log ratios of the two measurements are called M values (from “minus” in the log scale) and are represented in the vertical axis. The mean values of the two measurements are called A values (from “average” in the log scale) and are represented in the horizontal axis.
+
+In microarray data contexts an MA-plot is used to compare two channels of intensity measurements. These two channels can be the red and green channels of one single chip of a two-color platform or the intensity measurements of two different arrays when using a single-channel platform. In a single-channel context at least two arrays are needed to draw a meaningful MA-plot.
+
 $M = log_{2}(R/G) = log_{2}(R) - log_{2}(G)$
 
 $A = \frac{1}{2}log_{2}(R*G) = \frac{1}{2}(log_{2}(R) + log_{2}(G))$
+
+
 
 ### We can now make an MA-plot
 
 We first define a function to divide the plotting area in rows and columns, 
 if you are unfamiliar with how to set the plotting area, you can use the **?par**.
 
+
 ```r
 mypar <- function(nRow = 1, nCol = 1, ptsExp = 1) {
-    par(mar = c(2, 2, 2, 1))
-    par(oma = c(2, 1, 1, 1))
-    par(mfrow = c(nRow, nCol))
-    par(cex = ptsExp)
+    par(mar = c(2, 2, 2, 1))  # c(bottom, left, top, right)
+    par(oma = c(2, 1, 1, 1))  #  c(bottom, left, top, right) giving the size of the outer margins in lines of text.
+    par(mfrow = c(nRow, nCol))  # figures are drawn with (nr * nc) matrix 
+    par(cex = ptsExp)  # magnification of plotting text and points
 }
 ```
 
@@ -297,7 +309,7 @@ nr <- ceiling(ncol(dat.rma)/nc)
 ```
 
 
-We can make a plot for the raw data, before normalization
+### We can make a plot for the raw data, before normalization
 
 ```r
 mypar(nr, nc, 0.5)
@@ -333,7 +345,7 @@ pdf
 
 ```r
 mypar(nr, nc, 0.5)
-par(oma = c(2, 1, 1, 1))
+par(oma = c(2, 1, 1, 1))  #overwrite initial mypar settings
 a <- exprs(dat.rma)
 for (i in 1:ncol(a)) {
     ma.plot(A = ((a[, i] + apply(a, 1, median))/2), M = (a[, i] - apply(a, 1, 
@@ -389,6 +401,8 @@ pdf
 ```
 
 
+![plot of chunk affy_image_demo](figure/affy_image_demo.png) 
+
 
 ### Log2 intensities boxplots: before and after normalization
 
@@ -412,13 +426,25 @@ pdf
 ```
 
 
+![plot of chunk boxplots_for_demo_inClass](figure/boxplots_for_demo_inClass.png) 
+
+
 
 ### RNA Degradation
+
+The functions AffyRNAdeg, summaryAffyRNAdeg, and plotAffyRNAdeg aid in assessment of RNA quality. Since RNA degradation typically starts from the $5'$ end of the molecule, we would expect probe intensities to be systematically lowered at that end of a probeset when compared to the $3'$ end.
 
 Compute RNA degradation
 
 ```r
 deg <- AffyRNAdeg(dat)
+
+names(deg)  # We plot the degradation and slope
+```
+
+```
+[1] "N"               "sample.names"    "means.by.number" "ses"            
+[5] "slope"           "pvalue"         
 ```
 
 
@@ -439,6 +465,9 @@ dev.off()
 pdf 
   2 
 ```
+
+
+![plot of chunk rnaDegradationDemo](figure/rnaDegradationDemo.png) 
 
 
 Find the scan date

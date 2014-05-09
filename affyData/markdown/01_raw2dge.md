@@ -35,7 +35,7 @@ date()
 ```
 
 ```
-[1] "Mon May  5 22:19:06 2014"
+[1] "Thu May  8 21:09:23 2014"
 ```
 
 
@@ -150,21 +150,21 @@ dat
 ```
 
 ```
-
+## 
 ```
 
 ```
-AffyBatch object
-size of arrays=640x640 features (20 kb)
-cdf=HG_U95A (12626 affyids)
-number of samples=13
-number of genes=12626
-annotation=hgu95a
-notes=
+## AffyBatch object
+## size of arrays=640x640 features (20 kb)
+## cdf=HG_U95A (12626 affyids)
+## number of samples=13
+## number of genes=12626
+## annotation=hgu95a
+## notes=
 ```
 
 
-Check the Class of the dat object
+Check the **Class** of the dat object
 
 ```r
 class(dat)
@@ -207,7 +207,7 @@ Formal class 'AffyBatch' [package "affy"] with 10 slots
   .. ..- attr(*, "names")= chr "Rows"
   ..@ ncol             : Named int 640
   .. ..- attr(*, "names")= chr "Cols"
-  ..@ assayData        :<environment: 0x7fea65d0f750> 
+  ..@ assayData        :<environment: 0x7f960c5af240> 
   ..@ phenoData        :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
   .. .. ..@ varMetadata      :'data.frame':	1 obs. of  1 variable:
   .. .. .. ..$ labelDescription: chr "arbitrary numbering"
@@ -1239,9 +1239,10 @@ other attached packages:
 [13] knitr_1.5           
 
 loaded via a namespace (and not attached):
- [1] affyio_1.30.0         digest_0.6.4          evaluate_0.5.5       
- [4] formatR_0.10          IRanges_1.20.7        preprocessCore_1.24.0
- [7] stats4_3.0.3          stringr_0.6.2         tools_3.0.3          
-[10] XML_3.98-1.1          xtable_1.7-3          zlibbioc_1.8.0       
+ [1] affyio_1.30.0         codetools_0.2-8       digest_0.6.4         
+ [4] evaluate_0.5.5        formatR_0.10          IRanges_1.20.7       
+ [7] preprocessCore_1.24.0 stats4_3.0.3          stringr_0.6.2        
+[10] tools_3.0.3           XML_3.98-1.1          xtable_1.7-3         
+[13] zlibbioc_1.8.0       
 ```
 

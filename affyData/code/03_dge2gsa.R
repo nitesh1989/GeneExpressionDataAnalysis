@@ -12,7 +12,7 @@ getwd()
 
 ###################################################
 ### Setting the working directory, in my case
-setwd("~/Documents/GitHub/GeneExpressionDataAnalysis/affyData/")
+setwd("~/Documents/GeneExpressionDataAnalysis/affyData/")
 
 
 ###################################################

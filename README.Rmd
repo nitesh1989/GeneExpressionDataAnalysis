@@ -1,7 +1,7 @@
 Gene Expression Analysis
 ========================================================
 
-Nitesh Turaga, Johns Hopkins University, Email: nturaga1@jhmi.edu 
+Nitesh Turaga, Johns Hopkins University, Email: nturaga1@jhmi.edu
 
 
 Original Code by: **Luigi Marchionni, MD, PhD**, Johns Hopkins University, Email: marchion@jhu.edu
@@ -17,7 +17,12 @@ Class Content:
 
 1. Affymetrix Gene expression data analysis
 
-   
+Resources: [http://rpubs.com/nturaga/affyData_resources_00](http://rpubs.com/nturaga/affyData_resources_00)
+File 1: [http://rpubs.com/nturaga/affyData_raw2dge_01](http://rpubs.com/nturaga/affyData_raw2dge_01)
+File 2: [http://rpubs.com/nturaga/affyData_diagnostics_02](http://rpubs.com/nturaga/affyData_diagnostics_02)
+File 3: [http://rpubs.com/nturaga/affyData_dge2gsa_03](http://rpubs.com/nturaga/affyData_dge2gsa_03)
+
+
 **Class Date: May 9th**
 
 1. Gene Set Analysis
