@@ -15,15 +15,6 @@ knitr::purl("01_raw2dge.Rmd")
 ```
 
 
-To view HTML pages,
-
-1. Resources: [http://rpubs.com/nturaga/affyData_resources_00](http://rpubs.com/nturaga/affyData_resources_00)
-2. Code 1: [http://rpubs.com/nturaga/affyData_raw2dge_01](http://rpubs.com/nturaga/affyData_raw2dge_01)
-3. Code 2: [http://rpubs.com/nturaga/affyData_diagnostics_02](http://rpubs.com/nturaga/affyData_diagnostics_02)
-4. Code 3: [http://rpubs.com/nturaga/affyData_dge2gsa_03](http://rpubs.com/nturaga/affyData_dge2gsa_03)
-
-
-
 Useful resources for the class and life after
 -------------------------------
 
