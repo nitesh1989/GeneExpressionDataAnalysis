@@ -8,10 +8,21 @@ Goal: To introduce a few useful commands and tools in R.
 
 If you want to extract the R code only from a markdown file, use the following command in the library **knitr** called *purl*.
 
+
 ```{r,echo =TRUE,eval=FALSE}
 library(knitr)
 knitr::purl("01_raw2dge.Rmd")
 ```
+
+
+To view HTML pages,
+
+1. Resources: [http://rpubs.com/nturaga/affyData_resources_00](http://rpubs.com/nturaga/affyData_resources_00)
+2. Code 1: [http://rpubs.com/nturaga/affyData_raw2dge_01](http://rpubs.com/nturaga/affyData_raw2dge_01)
+3. Code 2: [http://rpubs.com/nturaga/affyData_diagnostics_02](http://rpubs.com/nturaga/affyData_diagnostics_02)
+4. Code 3: [http://rpubs.com/nturaga/affyData_dge2gsa_03](http://rpubs.com/nturaga/affyData_dge2gsa_03)
+
+
 
 Useful resources for the class and life after
 -------------------------------
@@ -25,3 +36,5 @@ Useful resources for the class and life after
 4. **limma** vignette which is available on Bioconductor. [http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf](http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf)
 
 5. More information on how to make robust design matrices for experiments can be found in, **Statistics for Biology and Health - Springer**, **Chapter V, Page 399-417**.[http://www.statsci.org/smyth/pubs/limma-biocbook-reprint.pdf](http://www.statsci.org/smyth/pubs/limma-biocbook-reprint.pdf)
+
+6. RTopper vignette, [http://www.bioconductor.org/packages/release/bioc/vignettes/RTopper/inst/doc/RTopper.pdf](http://www.bioconductor.org/packages/release/bioc/vignettes/RTopper/inst/doc/RTopper.pdf).

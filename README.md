@@ -1,7 +1,7 @@
 Gene Expression Analysis
 ========================================================
 
-Nitesh Turaga, Johns Hopkins University, Email: nturaga1@jhmi.edu 
+Nitesh Turaga, Johns Hopkins University, Email: nturaga1@jhmi.edu
 
 
 Original Code by: **Luigi Marchionni, MD, PhD**, Johns Hopkins University, Email: marchion@jhu.edu
@@ -17,11 +17,10 @@ Class Content:
 
 1. Affymetrix Gene expression data analysis
 
-   
 **Class Date: May 9th**
 
 1. Gene Set Analysis
-2. RNAseq Analysis 
+2. RNAseq Analysis (IF time permits, otherwise, check the website I will upload well documented code)
 
 
 
@@ -83,15 +82,11 @@ sessionInfo()
 ```
 
 ```
-## R version 3.0.1 (2013-05-16)
-## Platform: x86_64-w64-mingw32/x64 (64-bit)
+## R version 3.0.3 (2014-03-06)
+## Platform: x86_64-apple-darwin13.1.0 (64-bit)
 ## 
 ## locale:
-## [1] LC_COLLATE=English_United States.1252 
-## [2] LC_CTYPE=English_United States.1252   
-## [3] LC_MONETARY=English_United States.1252
-## [4] LC_NUMERIC=C                          
-## [5] LC_TIME=English_United States.1252    
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -100,7 +95,7 @@ sessionInfo()
 ## [1] knitr_1.5
 ## 
 ## loaded via a namespace (and not attached):
-## [1] evaluate_0.5.5 formatR_0.10   stringr_0.6.2  tools_3.0.1
+## [1] evaluate_0.5.5 formatR_0.10   stringr_0.6.2  tools_3.0.3
 ```
 
 
